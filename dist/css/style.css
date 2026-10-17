@@ -1,0 +1,512 @@
+:root {
+    /* Colors */
+    --border:#3a4b68;
+    --panel-bg:#e1e3ec;
+    --btn: #9099c2;
+    --btn-hover: #81d2c7;
+    --btn-click: #595e77;
+    --tab: #416788;
+    --tab-active: #66a39b;
+}
+
+body{
+    background: var(--tab);
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;   
+}
+
+#env {
+    position: fixed;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    transform: scale(1);
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-crisp-edges;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+#env-canvas {
+    top: 0;
+    left: 0;
+    position: relative;
+}
+
+.control-panel {
+    height: 300px;
+    width: 100%;
+    bottom: 0;
+    position: fixed;
+    background-color: var(--border);
+    display: none;
+    grid-template-columns: repeat(3, 1fr);
+    /* opacity: 0.8; */
+}
+
+/* .control-panel:hover {
+    opacity: 1;
+} */
+
+.control-set {
+    margin: 5px;
+    padding: 5px;
+    border: 10px;
+    border-radius: 15px;
+    background-color: var(--panel-bg);
+    grid-row: 1;
+}
+
+img {
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-crisp-edges;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    object-fit: cover;
+    width: 85%;
+    max-width: 500px;
+    max-height: 40%;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+button {
+    border: none;
+    color: black;
+    background-color: var(--btn);
+    border-radius: 8px;
+    padding: 5px 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    min-width: 30px;
+    margin: 2px;
+}
+button:hover{
+    background-color: var(--btn-hover);
+}
+button:active{
+    background-color: var(--btn-click);
+}
+
+input,select {
+    border-radius: 5px;
+    border: 2px solid var(--btn);
+    padding: 2px;
+    background-color: white;
+    outline: none;
+}
+input {
+    max-width: 100px;
+}
+input:hover,input:active {
+    background-color: rgb(250,250,250);
+}
+
+.icon-links {
+    font-size: 35px;
+    position: fixed;
+    bottom: 10px;
+    right: 20px;
+}
+
+#speed-controller {
+    grid-column: 1;
+}
+#slider, #slider-hot {
+    width: 70%;
+    max-width: none;
+}
+
+#color-scheme-container {
+    margin-top: 10px;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+}
+
+.vertical-buttons {
+    float:right;
+    display: grid;
+    grid-template-rows: 2;
+    grid-template-columns: 1;
+}
+.editor-buttons {
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: 1;
+    height: fit-content;
+}
+
+.col-row-input {
+    display: none;
+}
+
+#tab-container {
+    grid-column: 2 / 4;
+}
+
+.tabnav {
+    overflow: hidden;
+    background-color: var(--tab);
+    border-radius: 15px;
+}
+.tabnav p {
+    float: left;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 18px;
+    user-select: none;
+}
+.tabnav p:hover {
+    background-color: var(--btn-hover);
+    color: black;
+}
+.tabnav p:active {
+    background-color: var(--btn-click);
+    color: white;
+}
+.open-tab {
+    background-color: var(--tab-active);
+    color: black;
+}
+
+.tab {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1;
+    display: none;
+    padding: 10px;
+    overflow-y: auto;
+    padding-bottom: 0px;
+}
+
+.tab#about {
+    display: grid;
+}
+
+.left-half {
+    grid-column: 1;
+}
+
+.right-half {
+    grid-column: 2;
+}
+
+.global-mutation-container {
+    display: none;
+}
+
+#editor-panel{
+    display: flex;
+}
+.edit-mode-btn {
+    width: 30px;
+    height: 30px;
+}
+.edit-mode-btn.selected {
+    background-color: var(--btn-hover);
+}
+#clear-walls {
+    margin-top: 5px;
+}
+#brush-size-container {
+    display: flex;
+    align-items: center;
+}
+#organism-options {
+    display: none;
+}
+#drop-org {
+    bottom: 0;
+}
+#editor-env {
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-crisp-edges;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    height: 195px;
+    width: 195px;
+    display: block;
+}
+#unnatural-org-warning {
+    color: red;
+    text-align: center;
+    font-size: 15px;
+    border-radius: 10px;
+    border: 2px solid red;
+}
+#unnatural-org-warning:hover {
+    color: darkred;
+    border: 2px solid darkred;
+
+}
+#cell-selections {
+    display: none;
+    grid-template-columns: 2;
+    height: fit-content;
+    padding: 0;
+    margin: 0;
+}
+#cell-legend {
+    display: flex;
+    width: max-content;
+    padding: 10px;
+    align-items: center;
+    background-color: #121D29;
+    border-radius: 10px;
+}
+.cell-type {
+    width: 30px;
+    height: 30px;
+    border: solid black;
+    border-width: 2px;
+    margin: 1px;
+}
+.cell-legend-type {
+    width: 50px;
+    height: 50px;
+    margin: 1px;
+}
+#editor-mode-cont{
+    padding-top: 20px;
+}
+
+.challenge-btn {
+    height: 50px;
+    margin: 5px;
+}
+
+#chartContainer {
+    height: 200px; 
+    width: 100%;
+}
+
+.community-section {
+    position: fixed;
+    right: 10px;
+    top: 10px;
+}
+
+.hot-controls {
+    position: fixed;
+    bottom: 10px;
+    padding-left: 10px;
+    /* display: none; */
+}
+
+#headless-notification {
+    display: none;
+    position: fixed;
+    color: white;
+    font-size: 200px;
+    left: 0;
+    top: 0;
+    padding-left: 10px;
+}
+
+#minimize {
+    margin: 10px;
+    float: right;
+}
+#maximize-hot-control {
+    right: 10px;
+}
+
+.fps-box {
+    background-color: var(--btn);
+    border-radius: 8px;
+    padding: 0 5px 0 0;
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+}
+
+#fps-hot {
+    background-color: var(--btn);
+    border-radius: 8px;
+    padding: 5px 8px;
+    color: black;
+    display: inline-block;
+    min-width: 50px;
+    margin: 2px;
+    font-size: 16px;
+    vertical-align: middle;
+    width:100px;
+}
+
+.grid-size-in {
+    width: 75px;
+}
+
+#video {
+    height: 200px;
+    margin: auto;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.load-panel {
+    width: 800px;
+    background-color: var(--panel-bg);
+    position: fixed;
+    display: none;
+    text-align: center;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    border-style: solid;
+    border-width: 0px;
+    border-radius: 10px;
+    box-shadow: 0 0 0 10px var(--border);
+
+    padding: 10px;
+}
+
+.list-title-container {
+    flex: 1;
+}
+.list-container {
+    overflow-y: auto;
+    max-height: 200px;
+    margin-right: 5px;
+}
+
+.list-item {
+    cursor: pointer;
+    padding: 5px;
+    border-bottom: 1px solid #ccc;
+    background-color: var(--btn);
+}
+.list-item:hover {
+    background-color: var(--btn-hover);
+}
+.list-item:active {
+    background-color: var(--btn-click);
+}
+
+.all-list-container {
+    display: flex;
+    width: 100%;
+}
+
+#close-load-btn { 
+    float: right;
+}
+
+#load-panel-title {
+    white-space: nowrap;
+}
+#load-panel-title * {
+    display: inline;
+}
+
+/* Brain Editor Window */
+.brain-editor-window {
+    position: absolute;
+    bottom: 100%;
+    right: 0;
+    left: 33.33%;
+    width: 66.67%;
+    height: 450px;
+    background-color: var(--panel-bg);
+    border: 5px solid var(--border);
+    border-bottom: 0;
+    border-radius: 15px 15px 0 0;
+    box-sizing: border-box;
+    padding: 10px;
+    display: none;
+}
+
+.brain-editor-btn {
+    margin-top: 5px;
+}
+
+#brain-editor-window #close-brain-editor {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+/* Ensure organism details do not overflow */
+#organism-details,
+#edit-organism-details {
+    max-width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.tab .left-half,
+.tab .right-half,
+.control-set {
+    box-sizing: border-box;
+}
+
+/* Allow inner halves to scroll instead of enlarging */
+.tab .left-half,
+.tab .right-half {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 230px;
+}
+
+/* Brain Decision Map Styles */
+#brain-maps {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 10px;
+    overflow-x: auto;
+}
+.decision-map {
+    flex: 0 0 auto;
+    min-width: 300px;
+}
+.decision-map-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 4px;
+}
+.remove-state-btn {
+    background-color: var(--btn);
+    border: none;
+    color: black;
+    padding: 0 6px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.remove-state-btn:hover {
+    background-color: var(--btn-hover);
+}
+.remove-state-btn:active {
+    background-color: var(--btn-click);
+}
+.decision-map table {
+    border-collapse: collapse;
+}
+
+.decision-map th,
+.decision-map td {
+    border: 2px solid var(--border);
+    padding: 2px;
+    text-align: center;
+    background-color: var(--panel-bg);
+}
+
+.decision-map th {
+    font-weight: normal;
+    background-color: var(--panel-bg);
+}
