@@ -281,13 +281,15 @@
 							<option value="mut-rate">Mutation Rate</option>
 						</select>
 						<p id='chart-note'></p>
-						<h4 title='Records population, traits, food, soil and deaths by cause. Survives auto-resets (see the run column).'>Experiment Log</h4>
+						<h4 title='Records population, traits, selection, soil and deaths by cause, and classifies each animal extinction. Survives auto-resets (see the run column).'>Experiment Log</h4>
 						<label for="log-interval" title='Write one row every N ticks'>Log every N ticks:</label>
 						<input type="number" id="log-interval" min="1" max="100000" value=100 step="1">
 						<br>
 						<button id='download-log' title="Download the experiment log as CSV">Download log (CSV)</button>
+						<button id='download-extinctions' title="Download one row per animal extinction, with its classification">Download extinction report (CSV)</button>
 						<button id='clear-log' title="Clear the experiment log">Clear log</button>
 						<p id='log-status'>Rows logged: 0</p>
+						<p id='log-last-extinction'>Last extinction: none yet</p>
 					</div>
 					<div class='right-half'>
 						<div id="chartContainer"></div>

@@ -414,11 +414,10 @@ class ControlPanel {
         $('#dont-kill-same-species').change(function() {
             Hyperparams.dontKillSameSpecies = this.checked;
         });
-        // Logger modifications
+        // Logging and Soil controls.
         $('#kin-distance').change(function() {
             Hyperparams.kinDistance = parseInt($('#kin-distance').val());
         });
-        // Dhiren-Soil: controls for soil nutrient system
         $('#soil-enabled').change(function() {
             Hyperparams.soilEnabled = this.checked;
             ExperimentLogger.note(this.checked ? 'soil_on' : 'soil_off');
@@ -430,25 +429,28 @@ class ControlPanel {
                 Hyperparams[soilInputs[id]] = parseFloat($(id).val());
             });
         }
-        // Logger interval and download controls
         $('#log-interval').change(function() {
             ExperimentLogger.interval = Math.max(1, parseInt($('#log-interval').val()));
         });
-        $('#download-log').click(() => {
-            let blob = new Blob([ExperimentLogger.toCSV()], {type: 'text/csv'});
+        const downloadCSV = (text, name) => {
+            let blob = new Blob([text], {type: 'text/csv'});
             let url = URL.createObjectURL(blob);
             let downloadEl = document.getElementById('download-el');
             downloadEl.setAttribute("href", url);
-            downloadEl.setAttribute("download", "experiment_log_" + Date.now() + ".csv");
+            downloadEl.setAttribute("download", name + "_" + Date.now() + ".csv");
             downloadEl.click();
             setTimeout(() => URL.revokeObjectURL(url), 1000);
-        });
+        };
+        $('#download-log').click(() => downloadCSV(ExperimentLogger.toCSV(), 'experiment_log'));
+        $('#download-extinctions').click(() => downloadCSV(ExperimentLogger.extinctionsCSV(), 'extinction_report'));
         $('#clear-log').click(() => {
             if (confirm('Clear the experiment log?'))
                 ExperimentLogger.clear();
         });
         setInterval(() => {
             $('#log-status').text('Rows logged: ' + ExperimentLogger.rows.length + ' (run ' + ExperimentLogger.run + ')');
+            $('#log-last-extinction').text('Last extinction: ' + ExperimentLogger.lastClassification() +
+                ' | total extinctions: ' + ExperimentLogger.extinctions.length);
         }, 1000);
         $('#reset-rules').click(() => {
             this.setHyperparamDefaults();
@@ -500,7 +502,6 @@ class ControlPanel {
         $('#movers-produce').prop('checked', Hyperparams.moversCanProduce);
         $('#food-blocks').prop('checked', Hyperparams.foodBlocksReproduction);
         $('#dont-kill-same-species').prop('checked', Hyperparams.dontKillSameSpecies);
-        // Dhiren-Soil: update UI values for soil nutrient system
         $('#kin-distance').val(Hyperparams.kinDistance);
         $('#soil-enabled').prop('checked', Hyperparams.soilEnabled);
         $('#soil-max').val(Hyperparams.soilMax);

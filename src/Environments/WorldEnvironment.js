@@ -12,7 +12,7 @@ const Species = require('../Stats/Species');
 const SoilLayer = require('./SoilLayer');
 const ExperimentLogger = require('../Stats/ExperimentLogger');
 
-const SOIL_REGEN_INTERVAL = 10; // regenerate every N ticks (scaled), for speed
+const SOIL_REGEN_INTERVAL = 10; // Regenerate soil every 10 ticks.
 
 class WorldEnvironment extends Environment{
     constructor(engine, cell_size) {
@@ -24,6 +24,20 @@ class WorldEnvironment extends Environment{
         this.num_cols = Math.ceil(this.renderer.width / cell_size);
         this.grid_map = new GridMap(this.num_cols, this.num_rows, cell_size);
         this.soil = new SoilLayer(this.num_cols, this.num_rows);
+        // Add soil data to the experiment log.
+        if (!WorldEnvironment.probes_registered) {
+            const r3 = x => Math.round(x * 1000) / 1000;
+            const on = env => Hyperparams.soilEnabled && env.soil;
+            ExperimentLogger.registerProbe('soil_mean', env => on(env) ? r3(env.soil.mean()) : '');
+            ExperimentLogger.registerProbe('soil_depleted_frac', env => on(env) ? r3(env.soil.depletedFraction()) : '');
+            ExperimentLogger.registerProbe('soil_blocked_productions', env => {
+                if (!on(env)) return '';
+                let n = env.soil.blocked_productions;
+                env.soil.blocked_productions = 0; // per-interval count
+                return n;
+            });
+            WorldEnvironment.probes_registered = true;
+        }
         this.organisms = [];
         this.walls = [];
         this.total_mutability = 0;
@@ -56,14 +70,14 @@ class WorldEnvironment extends Environment{
         ExperimentLogger.tick(this);
     }
 
-    // Logger, hooks: called from Organism
-    onOrganismBirth(org) {
-        ExperimentLogger.onBirth(org);
+    // Logger: Log births and deaths reported by organisms.
+    onOrganismBirth(org, parent) {
+        ExperimentLogger.onBirth(org, parent);
     }
 
     onOrganismDeath(org, cause, attacker) {
         ExperimentLogger.onDeath(org, cause, attacker);
-        // Dhiren-Soil, decay: the body's nutrients go back into the soil it occupied
+        // Return nutrients to the soil when an organism dies.
         if (Hyperparams.soilEnabled && cause !== 'removed') {
             for (let cell of org.anatomy.cells) {
                 this.soil.add(org.c + cell.rotatedCol(org.rotation),
@@ -281,3 +295,4 @@ class WorldEnvironment extends Environment{
 }
 
 module.exports = WorldEnvironment;
+
