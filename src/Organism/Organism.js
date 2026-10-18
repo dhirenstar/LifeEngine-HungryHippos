@@ -305,10 +305,11 @@ class Organism {
     }
 
     // Logger: Pass the attacker and cause of death to the logger.
-    harm(attacker=null) {
+    harm(attacker=null, cause='killed') {
+        if (!this.living) return;
         this.damage++;
-        if (this.damage >= this.maxHealth() || Hyperparams.instaKill) {
-            this.die('killed', attacker);
+        if (this.damage >= this.maxHealth()) {
+            this.die(cause, attacker);
         }
     }
 

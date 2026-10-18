@@ -218,14 +218,11 @@
 						<label for="food-drop-rate" title='Rate at which food is automatically generated and dropped in the world'>Auto food drop rate:</label>
 						<input type="number" id="food-drop-rate" value=0 max="1000">
 						<br>
-						<label for="insta-kill" title='When on, killer cells immediately kill organisms they touch. When off, organisms have as much health as they have cells and only take 1 damage from killer cells.'>One touch kill</label>
-						<input type="checkbox" id="insta-kill">
-						<br>
 						<label for="dont-kill-same-species" title='When on, killer cells will not harm organisms of the same species.'>Don't kill same species</label>
 						<input type="checkbox" id="dont-kill-same-species">
 						<br>
 						<h4 title='HungryHippos modifications. All are off by default, which gives vanilla LifeEngine behaviour.'>HungryHippos Modifications</h4>
-						<label for="lava-enabled" title="Spawn temporary lava on empty or food tiles. Body overlap or edge contact is instantly lethal, including armored cells. Lava blocks reproduction and food production. Eyes perceive it as a Killer stimulus.">Enable lava waves</label>
+						<label for="lava-enabled" title="Spawn temporary lava on empty or food tiles. Each exposed body-cell/lava contact deals 1 damage per tick on overlap or across an edge. Armour blocks damage at its own position. Lava blocks reproduction and food production. Eyes perceive it as a Killer stimulus.">Enable lava waves</label>
 						<input type="checkbox" id="lava-enabled">
 						<br>
 						<label for="lava-min-tiles">Lava tiles, minimum:</label>
@@ -236,7 +233,7 @@
 						<label for="lava-duration" title="How many simulation ticks each wave remains active. Changes apply to the next wave.">Lava duration (ticks):</label>
 						<input type="number" id="lava-duration" min="1" value="500" step="1">
 						<br>
-						<label for="lava-cooldown" title="Ticks from a wave's expiration until the next wave. A zero-tile wave follows the same duration and cooldown.">Lava cooldown (ticks):</label>
+						<label for="lava-cooldown" title="Wait before the first wave after enabling or resetting, and from each wave's expiration until the next. A zero-tile wave follows the same duration and cooldown.">Lava cooldown (ticks):</label>
 						<input type="number" id="lava-cooldown" min="0" value="1000" step="1">
 						<br>
 						<label for="kin-distance" title='Max anatomical differences for a killer to count as kin when the experiment log classifies deaths.'>Kin distance (log):</label>

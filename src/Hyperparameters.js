@@ -29,7 +29,6 @@ const Hyperparams = {
         this.lavaDuration = 500;
         this.lavaCooldown = 1000;
 
-        this.instaKill = false;
         this.dontKillSameSpecies = false;
 
         this.lookRange = 30;
@@ -57,6 +56,7 @@ const Hyperparams = {
 
     loadJsonObj(obj) {
         for (let key in obj) {
+            if (key === 'instaKill') continue;
             this[key] = obj[key];
         }
     }

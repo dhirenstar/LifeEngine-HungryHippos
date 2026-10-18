@@ -347,9 +347,6 @@ class ControlPanel {
         $('#rot-enabled').change(function() {
             Hyperparams.rotationEnabled = this.checked;
         });
-        $('#insta-kill').change(function() {
-            Hyperparams.instaKill = this.checked;
-        });
         $('#look-range').change(function() {
             Hyperparams.lookRange = $('#look-range').val();
         });
@@ -519,7 +516,6 @@ class ControlPanel {
         $('#food-prod-prob').val(Hyperparams.foodProdProb);
         $('#lifespan-multiplier').val(Hyperparams.lifespanMultiplier);
         $('#rot-enabled').prop('checked', Hyperparams.rotationEnabled);
-        $('#insta-kill').prop('checked', Hyperparams.instaKill);
         $('#evolved-mutation').prop('checked', !Hyperparams.useGlobalMutability);
         $('#add-prob').val(Hyperparams.addProb);
         $('#change-prob').val(Hyperparams.changeProb);

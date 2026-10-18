@@ -1,8 +1,5 @@
 const CellStates = require('../Organism/Cell/CellStates');
 const Hyperparams = require('../Hyperparameters');
-const Neighbors = require('../Grid/Neighbors');
-
-const CONTACT_OFFSETS = [[0, 0], ...Neighbors.adjacent];
 
 function ticks(value, fallback, minimum = 0) {
     const number = Number(value);
@@ -14,7 +11,7 @@ class LavaLayer {
         this.env = env;
         this.tiles = [];
         this.expiresAt = null;
-        this.nextSpawnAt = 0;
+        this.nextSpawnAt = null;
     }
 
     clear() {
@@ -28,13 +25,16 @@ class LavaLayer {
 
     reset() {
         this.clear();
-        this.nextSpawnAt = 0;
+        this.nextSpawnAt = null;
     }
 
     update(tick) {
         if (!Hyperparams.lavaEnabled) {
             this.reset();
             return;
+        }
+        if (this.nextSpawnAt === null) {
+            this.nextSpawnAt = tick + ticks(Hyperparams.lavaCooldown, 1000);
         }
         if (this.expiresAt !== null && tick >= this.expiresAt) {
             const expired = this.expiresAt;
@@ -72,15 +72,17 @@ class LavaLayer {
         this.expiresAt = tick + ticks(Hyperparams.lavaDuration, 500, 1);
     }
 
-    killIfTouching(org) {
+    harmIfTouching(org) {
         if (!org.living || this.tiles.length === 0) return;
+        const offsets = [[0, 0], ...Hyperparams.killableNeighbors];
         for (const cell of org.anatomy.cells) {
+            if (cell.state === CellStates.armor) continue;
             const col = cell.getRealCol();
             const row = cell.getRealRow();
-            for (const [dc, dr] of CONTACT_OFFSETS) {
+            for (const [dc, dr] of offsets) {
                 if (this.env.grid_map.cellAt(col + dc, row + dr)?.lava) {
-                    org.die('lava');
-                    return;
+                    org.harm(null, 'lava');
+                    if (!org.living) return;
                 }
             }
         }
@@ -98,7 +100,7 @@ class LavaLayer {
         this.reset();
         if (!data) return;
         this.expiresAt = data.expiresAt;
-        this.nextSpawnAt = data.nextSpawnAt;
+        this.nextSpawnAt = data.nextSpawnAt ?? null;
         for (const position of data.tiles) {
             const cell = this.env.grid_map.cellAt(position.c, position.r);
             if (cell && cell.state !== CellStates.wall && !cell.lava) {

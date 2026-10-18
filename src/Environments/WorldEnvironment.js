@@ -55,12 +55,10 @@ class WorldEnvironment extends Environment{
         var to_remove = [];
         for (var i in this.organisms) {
             var org = this.organisms[i];
-            this.lava.killIfTouching(org);
             if (org.living) org.update();
-            this.lava.killIfTouching(org);
         }
         for (var i in this.organisms) {
-            this.lava.killIfTouching(this.organisms[i]);
+            this.lava.harmIfTouching(this.organisms[i]);
             if (!this.organisms[i].living) {
                 to_remove.push(i);
             }
