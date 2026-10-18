@@ -25,6 +25,7 @@ class Organism {
         this.damage = 0;
         this.lineage = '';
         this.offspring = 0; // Logger: successful births, used by the logger
+        this.offspring = 0; // Logger: successful births
         this.brain = new Brain(this);
         if (parent != null) {
             this.inherit(parent);
@@ -99,7 +100,7 @@ class Organism {
             this.env.addOrganism(org);
             org.updateGrid();
             this.offspring++;
-            if (this.env.onOrganismBirth) this.env.onOrganismBirth(org);
+            if (this.env.onOrganismBirth) this.env.onOrganismBirth(org, this);
             if (mutated) {
                 FossilRecord.addSpecies(org, this.species);
             }
@@ -303,8 +304,7 @@ class Organism {
         return true;
     }
 
-    // Logger: harm/die take the attacker and cause so deaths can be
-    // attributed by the logger. Behaviour is unchanged.
+    // Logger: Pass the attacker and cause of death to the logger.
     harm(attacker=null) {
         this.damage++;
         if (this.damage >= this.maxHealth() || Hyperparams.instaKill) {
