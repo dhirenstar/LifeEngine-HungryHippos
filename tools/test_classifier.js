@@ -26,6 +26,15 @@ function seg(list) {
 }
 
 const tests = {
+    too_small_to_classify() {
+        // A tiny population (peak of 3) is too small to judge, even though a trait changed.
+        let s = seg([
+            { animals: 2 }, { animals: 3, animal_eye_frac: 0.667 },
+            { animals: 1, animal_eye_frac: 0 }, { animals: 0, deaths_animal_age_no_offspring: 1 },
+        ]);
+        assert.strictEqual(classify(s, 1).classification, 'too_small_to_classify');
+    },
+
     failure_to_adapt() {
          // The population declines without recovering, with deaths from old age without offspring.
         let s = seg([{ animals: 10 }, { animals: 8 }, { animals: 4, deaths_animal_age_no_offspring: 4 }, { animals: 0, deaths_animal_age_no_offspring: 4 }]);

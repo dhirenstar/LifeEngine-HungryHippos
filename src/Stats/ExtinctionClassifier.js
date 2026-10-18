@@ -6,6 +6,7 @@
  * and the main causes of death during a collapse.
  *
  * Classifications:
+ *   too_small_to_classify      Peak population was too small to judge adaptation.
  *   failure_to_adapt           Population failed to establish.
  *   exhaustion_no_trait_change Population collapsed without a major trait change.
  *   drift_without_selection    A trait changed without clear evidence of selection.
@@ -21,6 +22,7 @@
  */
 
 const C = {
+    MIN_PEAK: 10,           // Minimum peak population needed to classify a collapse
     GROWTH_MIN: 1.5,        // Minimum growth needed for the population to establish
     DRIFT_MIN: 0.2,         // Minimum trait change: 0.2 for fractions, 20% for counts
     SELECTION_MIN: 0.02,    // Minimum breeder gap for count traits
@@ -172,6 +174,7 @@ function classify(segment, run, extinct = true) {
     let mechanism = '';
     let label;
     if (!extinct) label = 'no_extinction';
+    else if (peak.animals < C.MIN_PEAK) label = 'too_small_to_classify';
     else if (peak.animals / first.animals < C.GROWTH_MIN) label = 'failure_to_adapt';
     else if (!best || best.size < C.DRIFT_MIN) label = 'exhaustion_no_trait_change';
     else if (!report.selected) label = 'drift_without_selection';
