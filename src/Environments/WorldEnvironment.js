@@ -9,6 +9,10 @@ const FossilRecord = require('../Stats/FossilRecord');
 const WorldConfig = require('../WorldConfig');
 const SerializeHelper = require('../Utils/SerializeHelper');
 const Species = require('../Stats/Species');
+const SoilLayer = require('./SoilLayer');
+const ExperimentLogger = require('../Stats/ExperimentLogger');
+
+const SOIL_REGEN_INTERVAL = 10; // regenerate every N ticks (scaled), for speed
 
 class WorldEnvironment extends Environment{
     constructor(engine, cell_size) {
@@ -19,6 +23,7 @@ class WorldEnvironment extends Environment{
         this.num_rows = Math.ceil(this.renderer.height / cell_size);
         this.num_cols = Math.ceil(this.renderer.width / cell_size);
         this.grid_map = new GridMap(this.num_cols, this.num_rows, cell_size);
+        this.soil = new SoilLayer(this.num_cols, this.num_rows);
         this.organisms = [];
         this.walls = [];
         this.total_mutability = 0;
@@ -42,8 +47,29 @@ class WorldEnvironment extends Environment{
             this.generateFood();
         }
         this.total_ticks ++;
+        if (Hyperparams.soilEnabled && this.total_ticks % SOIL_REGEN_INTERVAL == 0) {
+            this.soil.regenerate(SOIL_REGEN_INTERVAL);
+        }
         if (this.total_ticks % this.data_update_rate == 0) {
             FossilRecord.updateData();
+        }
+        ExperimentLogger.tick(this);
+    }
+
+    // Logger, hooks: called from Organism
+    onOrganismBirth(org) {
+        ExperimentLogger.onBirth(org);
+    }
+
+    onOrganismDeath(org, cause, attacker) {
+        ExperimentLogger.onDeath(org, cause, attacker);
+        // Dhiren-Soil, decay: the body's nutrients go back into the soil it occupied
+        if (Hyperparams.soilEnabled && cause !== 'removed') {
+            for (let cell of org.anatomy.cells) {
+                this.soil.add(org.c + cell.rotatedCol(org.rotation),
+                              org.r + cell.rotatedRow(org.rotation),
+                              Hyperparams.soilDecayReturn);
+            }
         }
     }
 
@@ -162,8 +188,10 @@ class WorldEnvironment extends Environment{
             this.engine.stop();
             restart = true;
         }
+        ExperimentLogger.onReset(this);
         this.organisms = [];
         this.grid_map.fillGrid(CellStates.empty, !WorldConfig.clear_walls_on_reset);
+        this.soil.fill();
         this.renderer.renderFullGrid(this.grid_map.grid);
         this.total_mutability = 0;
         this.total_ticks = 0;
@@ -180,6 +208,7 @@ class WorldEnvironment extends Environment{
         this.renderer.cell_size = cell_size;
         this.renderer.fillShape(rows*cell_size, cols*cell_size);
         this.grid_map.resize(cols, rows, cell_size);
+        this.soil.resize(cols, rows);
     }
 
     resizeFillWindow(cell_size) {
@@ -188,6 +217,7 @@ class WorldEnvironment extends Environment{
         this.num_cols = Math.ceil(this.renderer.width / cell_size);
         this.num_rows = Math.ceil(this.renderer.height / cell_size);
         this.grid_map.resize(this.num_cols, this.num_rows, cell_size);
+        this.soil.resize(this.num_cols, this.num_rows);
     }
 
     serialize() {
@@ -199,6 +229,7 @@ class WorldEnvironment extends Environment{
             env.organisms.push(org.serialize());
         }
         env.fossil_record = FossilRecord.serialize();
+        env.soil = this.soil.serialize();
         env.controls = Hyperparams;
         return env;
     }
@@ -209,6 +240,7 @@ class WorldEnvironment extends Environment{
         let cell_size = env.grid.cell_size ? env.grid.cell_size : this.grid_map.cell_size;
         this.resizeGridColRow(cell_size, env.grid.cols, env.grid.rows)
         this.grid_map.loadRaw(env.grid);
+        this.soil.loadRaw(env.soil);
         for (let wall of env.grid.walls) {
             this.walls.push(this.grid_map.cellAt(wall.c, wall.r));
         }
@@ -249,4 +281,3 @@ class WorldEnvironment extends Environment{
 }
 
 module.exports = WorldEnvironment;
-

@@ -33,6 +33,18 @@ const Hyperparams = {
         this.extraMoverFoodCost = 0;
 
         this.maxOrganisms = -1;
+
+        // Logger: a killer within this many anatomical differences of its victim
+        // counts as kin when classifying deaths (see Organism/Kinship.js).
+        this.kinDistance = 2;
+
+        // Dhiren-Soil: Soil nutrients (see Environments/SoilLayer.js)
+        this.soilEnabled = false;
+        this.soilMax = 100;          // nutrient capacity per tile
+        this.soilCostPerFood = 10;   // drawn from a tile to grow one food there
+        this.soilRegen = 0.05;       // regrowth per tile per tick
+        this.soilTrample = 0.5;      // lost per tick from a tile under a mover cell
+        this.soilDecayReturn = 20;   // returned to each tile a dead organism occupied
     },
 
     loadJsonObj(obj) {

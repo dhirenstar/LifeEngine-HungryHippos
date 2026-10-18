@@ -204,6 +204,26 @@
 						<br>
 						<label for="dont-kill-same-species" title='When on, killer cells will not harm organisms of the same species.'>Don't kill same species</label>
 						<input type="checkbox" id="dont-kill-same-species">
+						<br>
+						<h4 title='HungryHippos modifications. All are off by default, which gives vanilla LifeEngine behaviour.'>HungryHippos Modifications</h4>
+						<label for="kin-distance" title='Max anatomical differences for a killer to count as kin when the experiment log classifies deaths.'>Kin distance (log):</label>
+						<input type="number" id="kin-distance" min="0" max="20" value=2 step="1">
+						<br>
+						<label for="soil-enabled" title='When on, producers must draw nutrients from the soil to grow food. Mover cells trample soil, dead organisms return nutrients, and soil slowly regenerates.'>Soil nutrients</label>
+						<input type="checkbox" id="soil-enabled">
+						<br>
+						<label for="soil-max" title='Nutrient capacity of each tile'>Soil capacity:</label>
+						<input type="number" id="soil-max" min="1" max="10000" value=100 step="1">
+						<label for="soil-cost" title='Nutrients drawn from a tile to grow one food on it'>Cost per food:</label>
+						<input type="number" id="soil-cost" min="0" max="10000" value=10 step="1">
+						<br>
+						<label for="soil-regen" title='Nutrients regained per tile per tick'>Regen / tick:</label>
+						<input type="number" id="soil-regen" min="0" max="100" value=0.05 step="0.01">
+						<label for="soil-trample" title='Nutrients lost per tick from a tile under a mover cell'>Trample / tick:</label>
+						<input type="number" id="soil-trample" min="0" max="100" value=0.5 step="0.1">
+						<br>
+						<label for="soil-decay" title='Nutrients returned to each tile a dead organism occupied'>Decay return:</label>
+						<input type="number" id="soil-decay" min="0" max="10000" value=20 step="1">
 
 						
 					</div>
@@ -261,6 +281,13 @@
 							<option value="mut-rate">Mutation Rate</option>
 						</select>
 						<p id='chart-note'></p>
+						<h4 title='Records population, traits, food, soil and deaths by cause. Survives auto-resets (see the run column).'>Experiment Log</h4>
+						<label for="log-interval" title='Write one row every N ticks'>Log every N ticks:</label>
+						<input type="number" id="log-interval" min="1" max="100000" value=100 step="1">
+						<br>
+						<button id='download-log' title="Download the experiment log as CSV">Download log (CSV)</button>
+						<button id='clear-log' title="Clear the experiment log">Clear log</button>
+						<p id='log-status'>Rows logged: 0</p>
 					</div>
 					<div class='right-half'>
 						<div id="chartContainer"></div>

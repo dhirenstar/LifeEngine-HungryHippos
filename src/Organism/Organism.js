@@ -23,6 +23,7 @@ class Organism {
         this.ignore_brain_for = 0;
         this.mutability = 5;
         this.damage = 0;
+        this.offspring = 0; // Logger: successful births, used by the logger
         this.brain = new Brain(this);
         if (parent != null) {
             this.inherit(parent);
@@ -95,6 +96,8 @@ class Organism {
             org.r = new_r;
             this.env.addOrganism(org);
             org.updateGrid();
+            this.offspring++;
+            if (this.env.onOrganismBirth) this.env.onOrganismBirth(org);
             if (mutated) {
                 FossilRecord.addSpecies(org, this.species);
             }
@@ -280,14 +283,18 @@ class Organism {
         return true;
     }
 
-    harm() {
+    // Logger: harm/die take the attacker and cause so deaths can be
+    // attributed by the logger. Behaviour is unchanged.
+    harm(attacker=null) {
         this.damage++;
         if (this.damage >= this.maxHealth() || Hyperparams.instaKill) {
-            this.die();
+            this.die('killed', attacker);
         }
     }
 
-    die() {
+    die(cause='removed', attacker=null) {
+        if (!this.living) return;
+        if (this.env.onOrganismDeath) this.env.onOrganismDeath(this, cause, attacker);
         for (var cell of this.anatomy.cells) {
             var real_c = this.c + cell.rotatedCol(this.rotation);
             var real_r = this.r + cell.rotatedRow(this.rotation);
@@ -308,7 +315,7 @@ class Organism {
     update() {
         this.lifetime++;
         if (this.lifetime > this.lifespan()) {
-            this.die();
+            this.die('age');
             return this.living;
         }
         if (this.food_collected >= this.foodNeeded()) {

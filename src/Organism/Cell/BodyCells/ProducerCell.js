@@ -21,6 +21,11 @@ class ProducerCell extends BodyCell{
             var loc_r=loc[1];
             var cell = env.grid_map.cellAt(real_c+loc_c, real_r+loc_r);
             if (cell != null && cell.state == CellStates.empty){
+                // Dhiren-Soil: Growing food draws nutrients from that tile.
+                // A depleted tile refuses production until it regenerates.
+                if (env.soil && Hyperparams.soilEnabled &&
+                    !env.soil.tryDraw(real_c+loc_c, real_r+loc_r, Hyperparams.soilCostPerFood))
+                    return;
                 env.changeCell(real_c+loc_c, real_r+loc_r, CellStates.food, null);
                 return;
             }
