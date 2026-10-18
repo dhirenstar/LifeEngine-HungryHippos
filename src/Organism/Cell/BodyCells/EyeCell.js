@@ -69,6 +69,10 @@ class EyeCell extends BodyCell{
             if (cell == null) {
                 break;
             }
+            if (cell.lava) {
+                const distance = Math.abs(start_col-col) + Math.abs(start_row-row);
+                return new Observation({ state: CellStates.killer, owner: null }, distance, direction);
+            }
             if (cell.owner === this.org && Hyperparams.seeThroughSelf) {
                 continue;
             }

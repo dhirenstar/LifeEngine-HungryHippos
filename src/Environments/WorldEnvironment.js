@@ -10,6 +10,7 @@ const WorldConfig = require('../WorldConfig');
 const SerializeHelper = require('../Utils/SerializeHelper');
 const Species = require('../Stats/Species');
 const SoilLayer = require('./SoilLayer');
+const LavaLayer = require('./LavaLayer');
 const ExperimentLogger = require('../Stats/ExperimentLogger');
 
 const SOIL_REGEN_INTERVAL = 10; // regenerate every N ticks (scaled), for speed
@@ -24,6 +25,7 @@ class WorldEnvironment extends Environment{
         this.num_cols = Math.ceil(this.renderer.width / cell_size);
         this.grid_map = new GridMap(this.num_cols, this.num_rows, cell_size);
         this.soil = new SoilLayer(this.num_cols, this.num_rows);
+        this.lava = new LavaLayer(this);
         this.organisms = [];
         this.walls = [];
         this.total_mutability = 0;
@@ -35,10 +37,17 @@ class WorldEnvironment extends Environment{
     }
 
     update() {
+        this.lava.update(this.total_ticks);
         var to_remove = [];
         for (var i in this.organisms) {
             var org = this.organisms[i];
-            if (!org.living || !org.update()) {
+            this.lava.killIfTouching(org);
+            if (org.living) org.update();
+            this.lava.killIfTouching(org);
+        }
+        for (var i in this.organisms) {
+            this.lava.killIfTouching(this.organisms[i]);
+            if (!this.organisms[i].living) {
                 to_remove.push(i);
             }
         }
@@ -113,6 +122,7 @@ class WorldEnvironment extends Environment{
     }
 
     addOrganism(organism) {
+        organism.getLineage();
         organism.updateGrid();
         this.total_mutability += organism.mutability;
         this.organisms.push(organism);
@@ -189,6 +199,7 @@ class WorldEnvironment extends Environment{
             restart = true;
         }
         ExperimentLogger.onReset(this);
+        this.lava.reset();
         this.organisms = [];
         this.grid_map.fillGrid(CellStates.empty, !WorldConfig.clear_walls_on_reset);
         this.soil.fill();
@@ -205,6 +216,7 @@ class WorldEnvironment extends Environment{
     }
 
     resizeGridColRow(cell_size, cols, rows) {
+        this.lava.reset();
         this.renderer.cell_size = cell_size;
         this.renderer.fillShape(rows*cell_size, cols*cell_size);
         this.grid_map.resize(cols, rows, cell_size);
@@ -212,6 +224,7 @@ class WorldEnvironment extends Environment{
     }
 
     resizeFillWindow(cell_size) {
+        this.lava.reset();
         this.renderer.cell_size = cell_size;
         this.renderer.fillWindow('env');
         this.num_cols = Math.ceil(this.renderer.width / cell_size);
@@ -230,6 +243,7 @@ class WorldEnvironment extends Environment{
         }
         env.fossil_record = FossilRecord.serialize();
         env.soil = this.soil.serialize();
+        env.lava = this.lava.serialize();
         env.controls = Hyperparams;
         return env;
     }
@@ -276,6 +290,8 @@ class WorldEnvironment extends Environment{
         SerializeHelper.overwriteNonObjects(env, this);
         if ($('#override-controls').is(':checked'))
             Hyperparams.loadJsonObj(env.controls)
+        this.lava.loadRaw(env.lava);
+        if (!Hyperparams.lavaEnabled) this.lava.reset();
         this.renderer.renderFullGrid(this.grid_map.grid);
     }
 }

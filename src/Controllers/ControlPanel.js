@@ -359,6 +359,33 @@ class ControlPanel {
         $('#independent-eye-decisions').change(function() {
             Hyperparams.evolveIndependentEyeDecisions = this.checked;
         });
+        $('#plant-killer-mutations').change(function() {
+            Hyperparams.allowPlantKillerMutations = this.checked;
+        });
+        $('#animal-eye-mutations').change(function() {
+            Hyperparams.allowAnimalEyeMutations = this.checked;
+        });
+        $('#killer-response').change(function() {
+            Hyperparams.killerResponse = this.value;
+        });
+        $('#lava-enabled').change(() => {
+            Hyperparams.lavaEnabled = $('#lava-enabled').is(':checked');
+            this.engine.env.lava.reset();
+            ExperimentLogger.note(Hyperparams.lavaEnabled ? 'lava_on' : 'lava_off');
+        });
+        const lavaInputs = {
+            '#lava-min-tiles': ['lavaMinTiles', 0],
+            '#lava-max-tiles': ['lavaMaxTiles', 0],
+            '#lava-duration': ['lavaDuration', 1],
+            '#lava-cooldown': ['lavaCooldown', 0]
+        };
+        for (const [id, [key, minimum]] of Object.entries(lavaInputs)) {
+            $(id).change(function() {
+                const value = Number(this.value);
+                if (Number.isFinite(value)) Hyperparams[key] = Math.max(minimum, Math.floor(value));
+                $(this).val(Hyperparams[key]);
+            });
+        }
         $('#food-drop-rate').change(function() {
             Hyperparams.foodDropProb = $('#food-drop-rate').val();
         });
@@ -515,6 +542,15 @@ class ControlPanel {
         $('#see-through-self').prop('checked', Hyperparams.seeThroughSelf);
         $('#global-mutation').val(Hyperparams.globalMutability);
         $('#independent-eye-decisions').prop('checked', Hyperparams.evolveIndependentEyeDecisions);
+        $('#plant-killer-mutations').prop('checked', Hyperparams.allowPlantKillerMutations);
+        $('#animal-eye-mutations').prop('checked', Hyperparams.allowAnimalEyeMutations);
+        $('#killer-response').val(Hyperparams.killerResponse);
+        $('#lava-enabled').prop('checked', Hyperparams.lavaEnabled);
+        $('#lava-min-tiles').val(Hyperparams.lavaMinTiles);
+        $('#lava-max-tiles').val(Hyperparams.lavaMaxTiles);
+        $('#lava-duration').val(Hyperparams.lavaDuration);
+        $('#lava-cooldown').val(Hyperparams.lavaCooldown);
+        if (!Hyperparams.lavaEnabled) this.engine.env.lava.reset();
         
         if (!Hyperparams.useGlobalMutability) {
             $('.global-mutation-container').css('display', 'none');

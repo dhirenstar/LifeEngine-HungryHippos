@@ -50,6 +50,14 @@ class Renderer {
 
     renderCell(cell) {
         cell.state.render(this.ctx, cell, this.cell_size);
+        if (cell.lava) {
+            const size = this.cell_size;
+            this.ctx.fillStyle = '#e53916';
+            this.ctx.fillRect(cell.x, cell.y, size, size);
+            this.ctx.fillStyle = '#ffb52e';
+            this.ctx.fillRect(cell.x + size * 0.2, cell.y + size * 0.2, size * 0.25, size * 0.6);
+            this.ctx.fillRect(cell.x + size * 0.45, cell.y + size * 0.55, size * 0.35, size * 0.2);
+        }
     }
 
     renderOrganism(org) {

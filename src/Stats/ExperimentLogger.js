@@ -21,7 +21,7 @@ const Kinship = require('../Organism/Kinship');
 const COLUMNS = [
     'run', 'tick',
     'animals', 'plants', 'other_orgs', 'animal_species',
-    'food_tiles',
+    'food_tiles', 'lava_tiles',
     'mean_animal_cells', 'animal_armor_frac', 'mean_animal_armor',
     'animal_killer_frac', 'mean_animal_mouths', 'animal_eye_frac',
     'births_animal', 'births_plant',
@@ -31,6 +31,7 @@ const COLUMNS = [
     'deaths_animal_killed_by_nonkin',   // Killed by a less similar organism
     'deaths_plant_age',                 // Plants that died of old age
     'deaths_plant_killed',              // Plants killed by other organisms
+    'deaths_lava', 'deaths_animal_lava', 'deaths_plant_lava',
     'soil_mean', 'soil_depleted_frac', 'soil_blocked_productions',
     'event'
 ];
@@ -72,6 +73,7 @@ const ExperimentLogger = {
             deaths_animal_age_reproduced: 0, deaths_animal_age_no_offspring: 0,
             deaths_animal_killed_by_kin: 0, deaths_animal_killed_by_nonkin: 0,
             deaths_plant_age: 0, deaths_plant_killed: 0,
+            deaths_lava: 0, deaths_animal_lava: 0, deaths_plant_lava: 0,
         };
     },
 
@@ -87,6 +89,12 @@ const ExperimentLogger = {
 
     onDeath(org, cause, attacker) {
         let k = kindOf(org);
+        if (cause === 'lava') {
+            this.c.deaths_lava++;
+            if (k === 'animal') this.c.deaths_animal_lava++;
+            else if (k === 'plant') this.c.deaths_plant_lava++;
+            return;
+        }
         if (k === 'animal') {
             if (cause === 'age') {
                 if (org.offspring > 0) this.c.deaths_animal_age_reproduced++;
@@ -152,6 +160,7 @@ const ExperimentLogger = {
             run: this.run, tick: env.total_ticks,
             animals, plants, other_orgs: other, animal_species: animal_species.size,
             food_tiles: food,
+            lava_tiles: env.lava ? env.lava.tiles.length : 0,
             mean_animal_cells: animals ? r3(cells / animals) : 0,
             animal_armor_frac: animals ? r3(armored / animals) : 0,
             mean_animal_armor: animals ? r3(armor / animals) : 0,

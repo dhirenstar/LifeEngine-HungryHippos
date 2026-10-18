@@ -196,6 +196,25 @@
 						<label for="independent-eye-decisions" title='When on, organisms can evolve independent brain decisions for each eye. When off, all eyes will share the same set of decisions. Will not affect existing organism brains, only new mutations.'>Enable independent eye decisions</label>
 						<input type="checkbox" id="independent-eye-decisions">
 						<br>
+						<label for="plant-killer-mutations" title="Allow Killer cells to evolve in descendants of seeded non-moving producers, even if descendants gain Movers. Existing cells are unchanged.">Allow plant-lineage Killer mutations</label>
+						<input type="checkbox" id="plant-killer-mutations" checked>
+						<br>
+						<label for="animal-eye-mutations" title="Allow Eyes to evolve in descendants of seeded movers, even if descendants lose Movers. Start with an eyeless animal for an eyeless lineage; existing cells are unchanged.">Allow animal-lineage Eye mutations</label>
+						<input type="checkbox" id="animal-eye-mutations" checked>
+						<br>
+						<label for="killer-response" title="Override movement when an Eye's selected observation is a Killer cell or lava. Default preserves evolved brain decisions; other stimuli are unchanged.">Eye response to Killers / lava:</label>
+						<select id="killer-response">
+							<option value="default">Default / evolved</option>
+							<option value="neutral">Ignore</option>
+							<option value="chase">Go towards</option>
+							<option value="retreat">Run away</option>
+							<option value="move_left">Move left of stimulus</option>
+							<option value="move_right">Move right of stimulus</option>
+							<option value="stop">Stop</option>
+							<option value="turn_left">Turn left</option>
+							<option value="turn_right">Turn right</option>
+						</select>
+						<br>
 						<label for="food-drop-rate" title='Rate at which food is automatically generated and dropped in the world'>Auto food drop rate:</label>
 						<input type="number" id="food-drop-rate" value=0 max="1000">
 						<br>
@@ -206,6 +225,20 @@
 						<input type="checkbox" id="dont-kill-same-species">
 						<br>
 						<h4 title='HungryHippos modifications. All are off by default, which gives vanilla LifeEngine behaviour.'>HungryHippos Modifications</h4>
+						<label for="lava-enabled" title="Spawn temporary lava on empty or food tiles. Overlapping lava with any body cell is lethal, including armored cells. Eyes perceive lava as a Killer stimulus.">Enable lava waves</label>
+						<input type="checkbox" id="lava-enabled">
+						<br>
+						<label for="lava-min-tiles">Lava tiles, minimum:</label>
+						<input type="number" id="lava-min-tiles" min="0" value="0" step="1">
+						<label for="lava-max-tiles">Maximum:</label>
+						<input type="number" id="lava-max-tiles" min="0" value="10" step="1">
+						<br>
+						<label for="lava-duration" title="How many simulation ticks each wave remains active. Changes apply to the next wave.">Lava duration (ticks):</label>
+						<input type="number" id="lava-duration" min="1" value="500" step="1">
+						<br>
+						<label for="lava-cooldown" title="Ticks from a wave's expiration until the next wave. A zero-tile wave follows the same duration and cooldown.">Lava cooldown (ticks):</label>
+						<input type="number" id="lava-cooldown" min="0" value="1000" step="1">
+						<br>
 						<label for="kin-distance" title='Max anatomical differences for a killer to count as kin when the experiment log classifies deaths.'>Kin distance (log):</label>
 						<input type="number" id="kin-distance" min="0" max="20" value=2 step="1">
 						<br>

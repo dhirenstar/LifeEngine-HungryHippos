@@ -234,6 +234,12 @@ class Brain {
                     console.error('state out of bounds', this.state, this.num_states);
                 }
                 decision = this.decisions[eye_index][this.state][obs.cell.state.name];
+                if (obs.cell.state === CellStates.killer && Hyperparams.killerResponse !== 'default') {
+                    const response = Decision[Hyperparams.killerResponse];
+                    if (response !== undefined && typeof response === 'number') {
+                        decision = { decision: response, state: decision.state };
+                    }
+                }
                 move_direction = obs.direction;
                 closest = obs.distance;
             }

@@ -20,6 +20,14 @@ const Hyperparams = {
 
         this.foodBlocksReproduction = true;
         this.moversCanProduce = false;
+        this.allowPlantKillerMutations = true;
+        this.allowAnimalEyeMutations = true;
+        this.killerResponse = 'default';
+        this.lavaEnabled = false;
+        this.lavaMinTiles = 0;
+        this.lavaMaxTiles = 10;
+        this.lavaDuration = 500;
+        this.lavaCooldown = 1000;
 
         this.instaKill = false;
         this.dontKillSameSpecies = false;
