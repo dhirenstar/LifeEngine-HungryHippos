@@ -598,12 +598,10 @@ class ControlPanel {
 
         var env = this.engine.env;
         $('#reset-env').click( function() {
-            env.reset();
-            this.stats_panel.reset();
+            if (env.reset()) this.stats_panel.reset();
         }.bind(this));
         $('#clear-env').click( () => {
-            env.reset(true, false);
-            this.stats_panel.reset();
+            if (env.reset(true, false)) this.stats_panel.reset();
         });
         $('#brush-slider').on('input change', function () {
             WorldConfig.brush_size = this.value;

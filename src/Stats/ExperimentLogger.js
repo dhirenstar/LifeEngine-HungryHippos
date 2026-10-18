@@ -24,22 +24,9 @@ const ExtinctionClassifier = require('./ExtinctionClassifier');
 
 const BASE_COLUMNS = [
     'run', 'tick',
-    'animals', 'plants', 'other_orgs', 'animal_species',
-    'food_tiles', 'lava_tiles',
-    'mean_animal_cells', 'animal_armor_frac', 'mean_animal_armor',
-    'animal_killer_frac', 'mean_animal_mouths', 'animal_eye_frac',
-    'births_animal', 'births_plant',
-    'deaths_animal_age_reproduced',     // Died of old age after reproducing
-    'deaths_animal_age_no_offspring',   // Died of old age without reproducing
-    'deaths_animal_killed_by_kin',      // Killed by a similar organism
-    'deaths_animal_killed_by_nonkin',   // Killed by a less similar organism
-    'deaths_plant_age',                 // Plants that died of old age
-    'deaths_plant_killed',              // Plants killed by other organisms
     'deaths_lava', 'deaths_animal_lava', 'deaths_plant_lava',
-    'soil_mean', 'soil_depleted_frac', 'soil_blocked_productions',
-    'event',
     'animals', 'plants', 'mixotrophs', 'inert_orgs', 'animal_species',
-    'food_tiles',
+    'food_tiles', 'lava_tiles',
     // animal traits (population)
     'mean_animal_cells', 'animal_armor_frac', 'mean_animal_armor',
     'animal_killer_frac', 'mean_animal_mouths', 'animal_eye_frac',
@@ -274,12 +261,6 @@ const ExperimentLogger = {
             animal_species: animal_species.size,
             food_tiles: food,
             lava_tiles: env.lava ? env.lava.tiles.length : 0,
-            mean_animal_cells: animals ? r3(cells / animals) : 0,
-            animal_armor_frac: animals ? r3(armored / animals) : 0,
-            mean_animal_armor: animals ? r3(armor / animals) : 0,
-            animal_killer_frac: animals ? r3(killers / animals) : 0,
-            mean_animal_mouths: animals ? r3(mouths / animals) : 0,
-            animal_eye_frac: animals ? r3(eyed / animals) : 0,
             mean_animal_cells: pop ? r3(pop.mean_cells) : 0,
             animal_armor_frac: pop ? r3(pop.armor_frac) : 0,
             mean_animal_armor: n.animal ? r3(a.armor_cells / n.animal) : 0,
