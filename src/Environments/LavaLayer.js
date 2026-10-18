@@ -1,5 +1,8 @@
 const CellStates = require('../Organism/Cell/CellStates');
 const Hyperparams = require('../Hyperparameters');
+const Neighbors = require('../Grid/Neighbors');
+
+const CONTACT_OFFSETS = [[0, 0], ...Neighbors.adjacent];
 
 function ticks(value, fallback, minimum = 0) {
     const number = Number(value);
@@ -72,9 +75,13 @@ class LavaLayer {
     killIfTouching(org) {
         if (!org.living || this.tiles.length === 0) return;
         for (const cell of org.anatomy.cells) {
-            if (org.getRealCell(cell)?.lava) {
-                org.die('lava');
-                return;
+            const col = cell.getRealCol();
+            const row = cell.getRealRow();
+            for (const [dc, dr] of CONTACT_OFFSETS) {
+                if (this.env.grid_map.cellAt(col + dc, row + dr)?.lava) {
+                    org.die('lava');
+                    return;
+                }
             }
         }
     }

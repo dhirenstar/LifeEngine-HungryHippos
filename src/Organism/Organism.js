@@ -287,13 +287,13 @@ class Organism {
     }
 
     isPassableCell(cell, parent){
-        return cell != null && (cell.state == CellStates.empty || cell.owner == this || cell.owner == parent || cell.state == CellStates.food);
+        return cell != null && !cell.lava && (cell.state == CellStates.empty || cell.owner == this || cell.owner == parent || cell.state == CellStates.food);
     }
 
-    isClear(col, row, rotation=this.rotation) {
+    isClear(col, row, rotation=this.rotation, forReproduction=false) {
         for(var loccell of this.anatomy.cells) {
             var cell = this.getRealCell(loccell, col, row, rotation);
-            if (cell==null) {
+            if (cell==null || (forReproduction && cell.lava)) {
                 return false;
             }
             if (cell.owner==this || cell.state==CellStates.empty || (!Hyperparams.foodBlocksReproduction && cell.state==CellStates.food)){
