@@ -196,11 +196,11 @@
 						<label for="independent-eye-decisions" title='When on, organisms can evolve independent brain decisions for each eye. When off, all eyes will share the same set of decisions. Will not affect existing organism brains, only new mutations.'>Enable independent eye decisions</label>
 						<input type="checkbox" id="independent-eye-decisions">
 						<br>
-						<label for="plant-killer-mutations" title="Allow Killer cells to evolve in descendants of seeded non-moving producers, even if descendants gain Movers. Existing cells are unchanged.">Allow plant-lineage Killer mutations</label>
-						<input type="checkbox" id="plant-killer-mutations" checked>
+						<label for="plant-killer-mutations" title="Prevent new Killer cells in plant descendants, even if they gain Movers. Start with Killer-free plants; existing cells are not removed.">Disable plant Killer cells</label>
+						<input type="checkbox" id="plant-killer-mutations">
 						<br>
-						<label for="animal-eye-mutations" title="Allow Eyes to evolve in descendants of seeded movers, even if descendants lose Movers. Start with an eyeless animal for an eyeless lineage; existing cells are unchanged.">Allow animal-lineage Eye mutations</label>
-						<input type="checkbox" id="animal-eye-mutations" checked>
+						<label for="animal-eye-mutations" title="Prevent new Eyes in animal descendants, even if they lose Movers. Start with eyeless animals; existing Eyes are not removed.">Disable animal Eyes</label>
+						<input type="checkbox" id="animal-eye-mutations">
 						<br>
 						<label for="killer-response" title="Override movement when an Eye's selected observation is a Killer cell or lava. Default preserves evolved brain decisions; other stimuli are unchanged.">Eye response to Killers / lava:</label>
 						<select id="killer-response">

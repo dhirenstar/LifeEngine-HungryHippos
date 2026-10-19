@@ -357,10 +357,10 @@ class ControlPanel {
             Hyperparams.evolveIndependentEyeDecisions = this.checked;
         });
         $('#plant-killer-mutations').change(function() {
-            Hyperparams.allowPlantKillerMutations = this.checked;
+            Hyperparams.allowPlantKillerMutations = !this.checked;
         });
         $('#animal-eye-mutations').change(function() {
-            Hyperparams.allowAnimalEyeMutations = this.checked;
+            Hyperparams.allowAnimalEyeMutations = !this.checked;
         });
         $('#killer-response').change(function() {
             Hyperparams.killerResponse = this.value;
@@ -539,8 +539,8 @@ class ControlPanel {
         $('#see-through-self').prop('checked', Hyperparams.seeThroughSelf);
         $('#global-mutation').val(Hyperparams.globalMutability);
         $('#independent-eye-decisions').prop('checked', Hyperparams.evolveIndependentEyeDecisions);
-        $('#plant-killer-mutations').prop('checked', Hyperparams.allowPlantKillerMutations);
-        $('#animal-eye-mutations').prop('checked', Hyperparams.allowAnimalEyeMutations);
+        $('#plant-killer-mutations').prop('checked', !Hyperparams.allowPlantKillerMutations);
+        $('#animal-eye-mutations').prop('checked', !Hyperparams.allowAnimalEyeMutations);
         $('#killer-response').val(Hyperparams.killerResponse);
         $('#lava-enabled').prop('checked', Hyperparams.lavaEnabled);
         $('#lava-min-tiles').val(Hyperparams.lavaMinTiles);
