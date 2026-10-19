@@ -1,6 +1,6 @@
 
 (function () {
-    const { WorldEnvironment, Hyperparams, ExperimentLogger, WorldConfig } = window.LE;
+    const { WorldEnvironment, Hyperparams, ExperimentLogger, WorldConfig, ColorScheme} = window.LE;
 
     const CHUNK = 1000;          // ticks between UI yields
     const CHECK_EVERY = CHUNK;   // extinction checked once per chunk
@@ -148,8 +148,23 @@
             if ($('cond-on').checked) conditions.push({ flag: true, label: 'sep_on' });
             if (!conditions.length) { alert('Pick at least one condition.'); $('run').disabled = false; return; }
 
-            if (!env) env = new WorldEnvironment(stubEngine, 5);
-
+            if (!env) {
+                env = new WorldEnvironment(stubEngine, 5);
+                if (ColorScheme) {
+                    const dummyEditor = {
+                        grid_map: { grid: [] },
+                        grid: [],
+                        renderer: { renderFullGrid() {}, cell_size: 5 },
+                        renderFull() {}
+                    };
+                    try {
+                        ColorScheme.setEnvironment(env, dummyEditor);
+                        ColorScheme.loadColorScheme();
+                    } catch (e) {
+                        log('Color scheme init warning: ' + e.message + ' — screenshots may be monochrome.');
+                    }
+                }
+            }
             const files = {}, summaryRows = [];
             const t0 = Date.now();
             for (const cond of conditions) {

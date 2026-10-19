@@ -7,8 +7,8 @@ import Hyperparams from './Hyperparameters';
 import ExperimentLogger from './Stats/ExperimentLogger';
 import WorldConfig from './WorldConfig';
 import CellStates from './Organism/Cell/CellStates';
-
-window.LE = { Engine, WorldEnvironment, Hyperparams, ExperimentLogger, WorldConfig, CellStates };
+import { ColorScheme } from './Rendering/ColorScheme';
+window.LE = { Engine, WorldEnvironment, Hyperparams, ExperimentLogger, WorldConfig, CellStates, ColorScheme};
 
 window.onload = function() {
     if (window.LE_NO_AUTOBOOT) return;
