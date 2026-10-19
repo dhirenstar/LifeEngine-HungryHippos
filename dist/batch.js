@@ -37,9 +37,17 @@
             reader.readAsText(f);
         });
     }
+    // Draw the full grid to the canvas and return a base64 PNG (no data: prefix).
+    function grabFrame() {
+        env.renderFull();                              // headless render() is a no-op; this forces a draw
+        const canvas = document.getElementById('env-canvas');
+        const url = canvas.toDataURL('image/png');
+        return url.replace(/^data:image\/png;base64,/, '');
+    }
 
     async function runOnce(world, controls, sepFlag, label, rep, maxTicks, logInterval) {
         // Globals: headless, and no auto-reset/pause (they would repopulate or call jQuery).
+        const shots = {};
         WorldConfig.headless = true;
         WorldConfig.auto_reset = false;
         WorldConfig.auto_pause = false;
@@ -63,15 +71,23 @@
         }
 
         let had = false, extinct = false, t = 0;
+        let nextShot = 0;   // capture at tick 0, 9000, 18000, ...
+        if (capture) { shots[`${label}_${String(rep).padStart(2,'0')}_t000000.png`] = grabFrame(); nextShot = 9000; }
         while (t < maxTicks) {
             const end = Math.min(t + CHUNK, maxTicks);
             for (; t < end; t++) { env.update(); env.render(); }
             const a = countAnimals(env);
             if (a > 0) had = true; else if (had) extinct = true;
             status(`${label} rep ${rep}: tick ${t}, animals ${a}`);
+            if (capture && t >= nextShot) {
+                shots[`${label}_${String(rep).padStart(2,'0')}_t${String(t).padStart(6,'0')}.png`] = grabFrame();
+                nextShot += 9000;
+            }
             await yieldUI();
             if (extinct) break;
         }
+        const finalName = `${label}_${String(rep).padStart(2,'0')}_t${String(t).padStart(6,'0')}_final.png`;
+        if (capture) shots[finalName] = grabFrame();
 
         // Force a final sample so the extinction/segment is classified.
         ExperimentLogger.sample(env, extinct ? 'batch_extinct' : 'batch_maxticks');
@@ -80,12 +96,17 @@
             ? ExperimentLogger.extinctions[ExperimentLogger.extinctions.length - 1]
             : ExperimentLogger.classifyCurrent();
 
+        // Keep the full 9k strip only for misadaptation candidates; otherwise just the final frame.
+        let keptShots = shots;
+        if (capture && report.classification !== 'misadaptation_candidate') {
+            keptShots = { [finalName]: shots[finalName] };
+        }
+
         log(`  ${label} rep ${rep}: ${extinct ? 'extinct @ ' + t : 'survived ' + t} ticks` +
             ` | peak ${report.peak} | ${report.classification}` +
             (report.mechanism ? ' (' + report.mechanism + ')' : ''));
 
-        return { csv: ExperimentLogger.toCSV(), report, final_animals: countAnimals(env), extinct, ticks: t };
-    }
+        return { csv: ExperimentLogger.toCSV(), report, final_animals: countAnimals(env), extinct, ticks: t, shots: keptShots };
 
     const SUMMARY_COLS = ['condition', 'rep', 'classification', 'mechanism', 'extinct', 'ticks',
         'founders', 'peak', 'peak_tick', 'growth', 'drift_trait', 'drift_size',
@@ -119,6 +140,7 @@
             const reps = parseInt($('reps').value);
             const maxTicks = parseInt($('max-ticks').value);
             const logInterval = parseInt($('log-interval').value);
+            const capture = $('capture') && $('capture').checked;
 
             const conditions = [];
             if ($('cond-off').checked) conditions.push({ flag: false, label: 'sep_off' });
@@ -132,10 +154,11 @@
             for (const cond of conditions) {
                 log(`== ${cond.label} (${reps} reps) ==`);
                 for (let rep = 1; rep <= reps; rep++) {
-                    const res = await runOnce(world, controls, cond.flag, cond.label, rep, maxTicks, logInterval);
+                    const res = await runOnce(world, controls, cond.flag, cond.label, rep, maxTicks, logInterval, capture);
                     if (!res) continue;
                     const name = `${cond.label}_${String(rep).padStart(2, '0')}`;
                     files[name + '_log.csv'] = res.csv;
+                    if (res.shots) for (const [fn, b64] of Object.entries(res.shots)) files[fn] = { b64 };
                     summaryRows.push(Object.assign(
                         { condition: cond.label, rep, ticks: res.ticks, extinct: res.extinct,
                           final_animals: res.final_animals }, res.report));
@@ -144,7 +167,10 @@
 
             status('Zipping…');
             const zip = new JSZip();
-            for (const [n, c] of Object.entries(files)) zip.file(n, c);
+            for (const [n, c] of Object.entries(files)) {
+                if (c && typeof c === 'object' && 'b64' in c) zip.file(n, c.b64, { base64: true });
+                else zip.file(n, c);
+            }
             zip.file('batch_summary.csv', summaryCSV(summaryRows));
             const blob = await zip.generateAsync({ type: 'blob' });
             downloadBlob(blob, `batch_${Date.now()}.zip`);

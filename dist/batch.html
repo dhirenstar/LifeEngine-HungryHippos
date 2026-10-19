@@ -14,8 +14,9 @@
         #status { margin-top: 16px; font-weight: bold; }
         #log { white-space: pre-wrap; background: #f4f4f4; padding: 10px; margin-top: 8px;
                max-height: 320px; overflow-y: auto; font-size: 12px; }
-        /* Renderer needs a real canvas to construct; it is never drawn to in headless. */
-        #env { position: fixed; left: -9999px; top: 0; width: 50px; height: 50px; }
+        /* Off-screen but full-size, so renderFull() produces real screenshots. */
+        #env { position: fixed; left: -9999px; top: 0; }
+        #env-canvas { width: 1370px; height: 675px; }   /* 274x135 grid at 5px cells */
     </style>
 </head>
 <body>
@@ -35,7 +36,10 @@
         <input type="number" id="log-interval" min="1" value="50" step="1"></div>
     <div class="row">
         <label><input type="checkbox" id="cond-off" checked> Run "separation off"</label><br>
-        <label><input type="checkbox" id="cond-on" checked> Run "separation on"</label>
+        <!-- after -->
+        <label><input type="checkbox" id="cond-on" checked> Run "separation on"</label><br>
+        <label><input type="checkbox" id="capture"> Capture screenshots (tick 0, every 9k, final) — use for 1-rep showcase only</label>
+    </div>
     </div>
 
     <button id="run">Run batch</button>
