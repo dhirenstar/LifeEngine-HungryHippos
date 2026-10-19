@@ -1,8 +1,17 @@
+// after
 'use strict';
 
 import Engine from './Engine';
+import WorldEnvironment from './Environments/WorldEnvironment';
+import Hyperparams from './Hyperparameters';
+import ExperimentLogger from './Stats/ExperimentLogger';
+import WorldConfig from './WorldConfig';
+import CellStates from './Organism/Cell/CellStates';
+import { ColorScheme } from './Rendering/ColorScheme';
+window.LE = { Engine, WorldEnvironment, Hyperparams, ExperimentLogger, WorldConfig, CellStates, ColorScheme};
 
 window.onload = function() {
+    if (window.LE_NO_AUTOBOOT) return;
     let isMobile = mobileCheck();
     if (isMobile) {
         alert("Welcome to the Life Engine! Be aware the website is not built for mobile, so try on desktop for the best experience!");

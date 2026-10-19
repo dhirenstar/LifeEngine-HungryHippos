@@ -1,0 +1,8 @@
+rep,issue,summary,observed
+8,summary_peak_is_latest_episode_not_whole_trial,1,506
+10,ancestry_columns_do_not_sum_in_some_samples,86,See raw log; endpoint checked separately
+29,summary_peak_is_latest_episode_not_whole_trial,1,265
+40,summary_peak_is_latest_episode_not_whole_trial,1,234
+47,summary_extinct_disagrees_with_endpoint,true,40
+47,summary_peak_is_latest_episode_not_whole_trial,2,330
+50,ancestry_columns_do_not_sum_in_some_samples,8,See raw log; endpoint checked separately

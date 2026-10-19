@@ -24,6 +24,9 @@ class Organism {
         this.mutability = 5;
         this.damage = 0;
         this.offspring = 0; // Logger: successful births
+        this.lineage = -1;  // lineage tracking
+        this.generation = 0;
+        this.founder_species = '';
         this.brain = new Brain(this);
         if (parent != null) {
             this.inherit(parent);
@@ -58,6 +61,9 @@ class Organism {
         //produce mutated child
         //check nearby locations (is there room and a direct path)
         var org = new Organism(0, 0, this.env, this);
+        org.lineage = this.lineage;
+        org.generation = this.generation + 1;
+        org.founder_species = this.founder_species;
         if(Hyperparams.rotationEnabled){
             org.rotation = Directions.getRandomDirection();
         }
@@ -97,13 +103,13 @@ class Organism {
             this.env.addOrganism(org);
             org.updateGrid();
             this.offspring++;
-            if (this.env.onOrganismBirth) this.env.onOrganismBirth(org, this);
             if (mutated) {
                 FossilRecord.addSpecies(org, this.species);
             }
             else {
                 org.species.addPop();
             }
+            if (this.env.onOrganismBirth) this.env.onOrganismBirth(org, this);
         }
         Math.max(this.food_collected -= this.foodNeeded(), 0);
     }
