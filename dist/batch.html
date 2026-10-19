@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Life Engine — Batch Runner</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <style>
+        body { font-family: monospace; max-width: 720px; margin: 24px auto; padding: 0 16px; }
+        h2 { margin-bottom: 4px; }
+        .row { margin: 8px 0; }
+        label { display: inline-block; min-width: 220px; }
+        input[type=number] { width: 90px; }
+        #run { margin-top: 12px; padding: 8px 18px; font-size: 15px; cursor: pointer; }
+        #status { margin-top: 16px; font-weight: bold; }
+        #log { white-space: pre-wrap; background: #f4f4f4; padding: 10px; margin-top: 8px;
+               max-height: 320px; overflow-y: auto; font-size: 12px; }
+        /* Renderer needs a real canvas to construct; it is never drawn to in headless. */
+        #env { position: fixed; left: -9999px; top: 0; width: 50px; height: 50px; }
+    </style>
+</head>
+<body>
+    <h2>Life Engine — Batch Runner</h2>
+    <p>Replays one saved world N times per condition (trophic separation off, then on),
+       logs each run, and downloads everything as a ZIP.</p>
+
+    <div class="row"><label for="world-file">Saved world (.json):</label>
+        <input type="file" id="world-file" accept=".json"></div>
+    <div class="row"><label for="controls-file">Controls (.json, optional):</label>
+        <input type="file" id="controls-file" accept=".json"></div>
+    <div class="row"><label for="reps">Replicates per condition:</label>
+        <input type="number" id="reps" min="1" value="10" step="1"></div>
+    <div class="row"><label for="max-ticks">Max ticks per run:</label>
+        <input type="number" id="max-ticks" min="100" value="36000" step="1000"></div>
+    <div class="row"><label for="log-interval">Log every N ticks:</label>
+        <input type="number" id="log-interval" min="1" value="50" step="1"></div>
+    <div class="row">
+        <label><input type="checkbox" id="cond-off" checked> Run "separation off"</label><br>
+        <label><input type="checkbox" id="cond-on" checked> Run "separation on"</label>
+    </div>
+
+    <button id="run">Run batch</button>
+    <div id="status">Idle.</div>
+    <div id="log"></div>
+
+    <!-- loadRaw() checks this; unchecked = ignore the world file's embedded controls. -->
+    <input type="checkbox" id="override-controls" style="display:none">
+    <div id="env"><canvas id="env-canvas"></canvas></div>
+
+    <script>window.LE_NO_AUTOBOOT = true;</script>
+    <script src="./js/bundle.js"></script>
+    <script src="./batch.js"></script>
+</body>
+</html>
