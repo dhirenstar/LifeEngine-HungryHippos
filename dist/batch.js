@@ -45,7 +45,7 @@
         return url.replace(/^data:image\/png;base64,/, '');
     }
 
-    async function runOnce(world, controls, sepFlag, label, rep, maxTicks, logInterval) {
+    async function runOnce(world, controls, sepFlag, label, rep, maxTicks, logInterval, capture) {
         // Globals: headless, and no auto-reset/pause (they would repopulate or call jQuery).
         const shots = {};
         WorldConfig.headless = true;
@@ -106,7 +106,8 @@
             ` | peak ${report.peak} | ${report.classification}` +
             (report.mechanism ? ' (' + report.mechanism + ')' : ''));
 
-        return { csv: ExperimentLogger.toCSV(), report, final_animals: countAnimals(env), extinct, ticks: t, shots: keptShots };
+       return { csv: ExperimentLogger.toCSV(), report, final_animals: countAnimals(env), extinct, ticks: t, shots: keptShots };
+    }
 
     const SUMMARY_COLS = ['condition', 'rep', 'classification', 'mechanism', 'extinct', 'ticks',
         'founders', 'peak', 'peak_tick', 'growth', 'drift_trait', 'drift_size',
