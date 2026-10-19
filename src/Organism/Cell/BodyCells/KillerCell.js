@@ -22,8 +22,11 @@ class KillerCell extends BodyCell{
             return;
         if (Hyperparams.dontKillSameSpecies && n_cell.owner.species.name === this.org.species.name)
             return;
-        // Dhiren-Logger: pass the attacker so the logger can attribute the death
+        var is_hit = n_cell.state == CellStates.killer;
         n_cell.owner.harm(this.org);
+        if (Hyperparams.instaKill && is_hit) {
+            this.org.harm(n_cell.owner);
+        }
     }
 }
 

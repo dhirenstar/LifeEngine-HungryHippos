@@ -12,6 +12,7 @@ class LavaLayer {
         this.tiles = [];
         this.expiresAt = null;
         this.nextSpawnAt = null;
+        this.currentTileCount = null;
     }
 
     clear() {
@@ -26,6 +27,7 @@ class LavaLayer {
     reset() {
         this.clear();
         this.nextSpawnAt = null;
+        this.currentTileCount = null;
     }
 
     update(tick) {
@@ -55,11 +57,12 @@ class LavaLayer {
                 }
             }
         }
-        const a = ticks(Hyperparams.lavaMinTiles, 0);
-        const b = ticks(Hyperparams.lavaMaxTiles, 10);
-        const min = Math.min(a, b, available.length);
-        const max = Math.min(Math.max(a, b), available.length);
-        const count = min + Math.floor(Math.random() * (max - min + 1));
+        const base = ticks(Hyperparams.lavaTileCount, 50);
+        const increment = ticks(Hyperparams.lavaIncrease, 25);
+        this.currentTileCount = Hyperparams.lavaProgressive
+            ? Math.min(500, this.currentTileCount === null ? base : this.currentTileCount + increment)
+            : base;
+        const count = Math.min(this.currentTileCount, available.length);
         for (let i = 0; i < count; i++) {
             const index = Math.floor(Math.random() * available.length);
             const cell = available[index];
@@ -92,7 +95,8 @@ class LavaLayer {
         return {
             tiles: this.tiles.map(cell => ({ c: cell.col, r: cell.row })),
             expiresAt: this.expiresAt,
-            nextSpawnAt: this.nextSpawnAt
+            nextSpawnAt: this.nextSpawnAt,
+            currentTileCount: this.currentTileCount
         };
     }
 
@@ -101,6 +105,7 @@ class LavaLayer {
         if (!data) return;
         this.expiresAt = data.expiresAt;
         this.nextSpawnAt = data.nextSpawnAt ?? null;
+        this.currentTileCount = data.currentTileCount ?? null;
         for (const position of data.tiles) {
             const cell = this.env.grid_map.cellAt(position.c, position.r);
             if (cell && cell.state !== CellStates.wall && !cell.lava) {

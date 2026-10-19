@@ -23,8 +23,6 @@ class Organism {
         this.ignore_brain_for = 0;
         this.mutability = 5;
         this.damage = 0;
-        this.lineage = '';
-        this.offspring = 0; // Logger: successful births, used by the logger
         this.offspring = 0; // Logger: successful births
         this.brain = new Brain(this);
         if (parent != null) {
@@ -36,7 +34,6 @@ class Organism {
         this.move_range = parent.move_range;
         this.mutability = parent.mutability;
         this.species = parent.species;
-        this.lineage = parent.lineage;
         for (var c of parent.anatomy.cells){
             //deep copy parent cells
             this.anatomy.addInheritCell(c);
@@ -111,31 +108,13 @@ class Organism {
         Math.max(this.food_collected -= this.foodNeeded(), 0);
     }
 
-    getLineage() {
-        if (!this.lineage) {
-            // Classify founders once; descendants retain their ancestry.
-            this.lineage = this.anatomy.is_mover ? 'animal'
-                : this.anatomy.is_producer ? 'plant' : 'other';
-        }
-        return this.lineage;
-    }
-
-    getMutationCellType() {
-        const lineage = this.getLineage();
-        const types = CellStates.living.filter(state =>
-            !(lineage === 'plant' && !Hyperparams.allowPlantKillerMutations && state === CellStates.killer) &&
-            !(lineage === 'animal' && !Hyperparams.allowAnimalEyeMutations && state === CellStates.eye)
-        );
-        return types[Math.floor(Math.random() * types.length)];
-    }
-
     mutate() {
         let added = false;
         let changed = false;
         let removed = false;
         if (this.calcRandomChance(Hyperparams.addProb)) {
             let branch = this.anatomy.getRandomCell();
-            let state = this.getMutationCellType();
+            let state = CellStates.getRandomLivingType();
             let growth_direction = Neighbors.all[Math.floor(Math.random() * Neighbors.all.length)];
             let c = branch.loc_col + growth_direction[0];
             let r = branch.loc_row + growth_direction[1];
@@ -178,7 +157,7 @@ class Organism {
         }
         if (this.calcRandomChance(Hyperparams.changeProb)){
             let cell = this.anatomy.getRandomCell();
-            let state = this.getMutationCellType();
+            let state = CellStates.getRandomLivingType();
             this.anatomy.replaceCell(state, cell.loc_col, cell.loc_row);
             changed = true;
         }
@@ -308,7 +287,7 @@ class Organism {
     harm(attacker=null, cause='killed') {
         if (!this.living) return;
         this.damage++;
-        if (this.damage >= this.maxHealth()) {
+        if (this.damage >= this.maxHealth() || (cause !== 'lava' && Hyperparams.instaKill)) {
             this.die(cause, attacker);
         }
     }

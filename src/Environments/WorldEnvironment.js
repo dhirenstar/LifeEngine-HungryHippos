@@ -134,7 +134,6 @@ class WorldEnvironment extends Environment{
     }
 
     addOrganism(organism) {
-        organism.getLineage();
         organism.updateGrid();
         this.total_mutability += organism.mutability;
         this.organisms.push(organism);

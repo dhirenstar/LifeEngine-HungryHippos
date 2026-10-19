@@ -196,27 +196,11 @@
 						<label for="independent-eye-decisions" title='When on, organisms can evolve independent brain decisions for each eye. When off, all eyes will share the same set of decisions. Will not affect existing organism brains, only new mutations.'>Enable independent eye decisions</label>
 						<input type="checkbox" id="independent-eye-decisions">
 						<br>
-						<label for="plant-killer-mutations" title="Prevent new Killer cells in plant descendants, even if they gain Movers. Start with Killer-free plants; existing cells are not removed.">Disable plant Killer cells</label>
-						<input type="checkbox" id="plant-killer-mutations">
-						<br>
-						<label for="animal-eye-mutations" title="Prevent new Eyes in animal descendants, even if they lose Movers. Start with eyeless animals; existing Eyes are not removed.">Disable animal Eyes</label>
-						<input type="checkbox" id="animal-eye-mutations">
-						<br>
-						<label for="killer-response" title="Override movement when an Eye's selected observation is a Killer cell or lava. Default preserves evolved brain decisions; other stimuli are unchanged.">Eye response to Killers / lava:</label>
-						<select id="killer-response">
-							<option value="default">Default / evolved</option>
-							<option value="neutral">Ignore</option>
-							<option value="chase">Go towards</option>
-							<option value="retreat">Run away</option>
-							<option value="move_left">Move left of stimulus</option>
-							<option value="move_right">Move right of stimulus</option>
-							<option value="stop">Stop</option>
-							<option value="turn_left">Turn left</option>
-							<option value="turn_right">Turn right</option>
-						</select>
-						<br>
 						<label for="food-drop-rate" title='Rate at which food is automatically generated and dropped in the world'>Auto food drop rate:</label>
 						<input type="number" id="food-drop-rate" value=0 max="1000">
+						<br>
+						<label for="insta-kill" title="Killer cells kill immediately instead of dealing damage. Lava always deals accumulated damage.">One touch kill</label>
+						<input type="checkbox" id="insta-kill">
 						<br>
 						<label for="dont-kill-same-species" title='When on, killer cells will not harm organisms of the same species.'>Don't kill same species</label>
 						<input type="checkbox" id="dont-kill-same-species">
@@ -225,16 +209,20 @@
 						<label for="lava-enabled" title="Spawn temporary lava on empty or food tiles. Each exposed body-cell/lava contact deals 1 damage per tick on overlap or across an edge. Armour blocks damage at its own position. Lava blocks reproduction and food production. Eyes perceive it as a Killer stimulus.">Enable lava waves</label>
 						<input type="checkbox" id="lava-enabled">
 						<br>
-						<label for="lava-min-tiles">Lava tiles, minimum:</label>
-						<input type="number" id="lava-min-tiles" min="0" value="0" step="1">
-						<label for="lava-max-tiles">Maximum:</label>
-						<input type="number" id="lava-max-tiles" min="0" value="10" step="1">
+						<label for="lava-tile-count" title="Fixed tiles per activation, or the starting count when progressive lava is enabled. Progressive counts are capped at 500.">Lava tiles:</label>
+						<input type="number" id="lava-tile-count" min="0" value="50" step="1">
 						<br>
 						<label for="lava-duration" title="How many simulation ticks each wave remains active. Changes apply to the next wave.">Lava duration (ticks):</label>
 						<input type="number" id="lava-duration" min="1" value="500" step="1">
 						<br>
 						<label for="lava-cooldown" title="Wait before the first wave after enabling or resetting, and from each wave's expiration until the next. A zero-tile wave follows the same duration and cooldown.">Lava cooldown (ticks):</label>
 						<input type="number" id="lava-cooldown" min="0" value="1000" step="1">
+						<br>
+						<label for="lava-progressive" title="Add more tiles on each activation, using the same duration and cooldown. Starts from Lava tiles and caps at 500. Changing mode restarts the progression.">Progressive lava</label>
+						<input type="checkbox" id="lava-progressive">
+						<br>
+						<label for="lava-increase">Extra tiles per activation:</label>
+						<input type="number" id="lava-increase" min="0" value="25" step="1" disabled>
 						<br>
 						<label for="kin-distance" title='Max anatomical differences for a killer to count as kin when the experiment log classifies deaths.'>Kin distance (log):</label>
 						<input type="number" id="kin-distance" min="0" max="20" value=2 step="1">

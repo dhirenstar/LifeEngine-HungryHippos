@@ -20,15 +20,14 @@ const Hyperparams = {
 
         this.foodBlocksReproduction = true;
         this.moversCanProduce = false;
-        this.allowPlantKillerMutations = true;
-        this.allowAnimalEyeMutations = true;
-        this.killerResponse = 'default';
         this.lavaEnabled = false;
-        this.lavaMinTiles = 0;
-        this.lavaMaxTiles = 10;
+        this.lavaProgressive = false;
+        this.lavaTileCount = 50;
+        this.lavaIncrease = 25;
         this.lavaDuration = 500;
         this.lavaCooldown = 1000;
 
+        this.instaKill = false;
         this.dontKillSameSpecies = false;
 
         this.lookRange = 30;
@@ -55,9 +54,11 @@ const Hyperparams = {
     },
 
     loadJsonObj(obj) {
+        if (obj.lavaTileCount === undefined && obj.lavaMaxTiles !== undefined) {
+            this.lavaTileCount = obj.lavaMaxTiles;
+        }
         for (let key in obj) {
-            if (key === 'instaKill') continue;
-            this[key] = obj[key];
+            if (Object.hasOwn(this, key) && typeof this[key] !== 'function') this[key] = obj[key];
         }
     }
 }
