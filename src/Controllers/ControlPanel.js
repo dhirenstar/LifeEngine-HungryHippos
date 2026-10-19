@@ -447,6 +447,8 @@ class ControlPanel {
         };
         $('#download-log').click(() => downloadCSV(ExperimentLogger.toCSV(), 'experiment_log'));
         $('#download-extinctions').click(() => downloadCSV(ExperimentLogger.extinctionsCSV(), 'extinction_report'));
+        $('#download-lineages').click(() => downloadCSV(ExperimentLogger.lineagesCSV(), 'lineage_log'));
+        $('#download-tree').click(() => downloadCSV(ExperimentLogger.familyTreeCSV(), 'family_tree'));
         $('#clear-log').click(() => {
             if (confirm('Clear the experiment log?'))
                 ExperimentLogger.clear();

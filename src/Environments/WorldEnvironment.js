@@ -127,6 +127,7 @@ class WorldEnvironment extends Environment{
     }
 
     addOrganism(organism) {
+        ExperimentLogger.trackLineage(organism, this);
         organism.updateGrid();
         this.total_mutability += organism.mutability;
         this.organisms.push(organism);
