@@ -1,0 +1,408 @@
+{
+  "trials": 50,
+  "raw_rows": 15220,
+  "unique_samples": 15170,
+  "endpoint_animal_presence": 32,
+  "endpoint_no_animals": 18,
+  "ancestry_count_mismatch_samples": 94,
+  "endpoint_presence_ci95": [
+    0.501410168761127,
+    0.7586125034815325
+  ],
+  "first_observed_category_disappearance": 19,
+  "original_ancestry_endpoint_presence": 15,
+  "original_ancestry_presence_ci95": [
+    0.19103553500880954,
+    0.437503504644534
+  ],
+  "ancestry_disappearance_ticks": {
+    "n": 35,
+    "mean": 15057.142857142857,
+    "median": 11900,
+    "q1": 9450.0,
+    "q3": 19300.0,
+    "minimum": 2800,
+    "maximum": 36000
+  },
+  "reappearance_reps": [
+    8,
+    29,
+    40,
+    47
+  ],
+  "peak_animals": {
+    "n": 50,
+    "mean": 363.7,
+    "median": 322.0,
+    "q1": 277.5,
+    "q3": 427.5,
+    "minimum": 191,
+    "maximum": 727
+  },
+  "peak_tick": {
+    "n": 50,
+    "mean": 12498,
+    "median": 7650.0,
+    "q1": 4925.0,
+    "q3": 20175.0,
+    "minimum": 2100,
+    "maximum": 35200
+  },
+  "initial_sample_animals": {
+    "n": 50,
+    "mean": 16.18,
+    "median": 17.0,
+    "q1": 15.0,
+    "q3": 17.0,
+    "minimum": 10,
+    "maximum": 21
+  },
+  "original_ancestry_rmst_36000": 21340,
+  "original_ancestry_median_first_absence": 15800,
+  "category_first_absence_rmst_36000": 30094,
+  "category_first_absence_ticks": {
+    "n": 19,
+    "mean": 20457.894736842107,
+    "median": 18000,
+    "q1": 12000.0,
+    "q3": 31200.0,
+    "minimum": 7000,
+    "maximum": 36000
+  },
+  "summary_classifications": {
+    "no_extinction": 31,
+    "misadaptation_candidate": 9,
+    "too_small_to_classify": 4,
+    "exhaustion_no_trait_change": 6
+  },
+  "first_episode_labels": {
+    "none": 31,
+    "misadaptation_candidate(self_predation)": 8,
+    "misadaptation_candidate(unclear)": 2,
+    "exhaustion_no_trait_change": 8,
+    "drift_without_selection": 1
+  },
+  "episode_labels": {
+    "misadaptation_candidate(self_predation)": 8,
+    "misadaptation_candidate(unclear)": 2,
+    "too_small_to_classify": 5,
+    "exhaustion_no_trait_change": 8,
+    "drift_without_selection": 1
+  },
+  "deaths": {
+    "deaths_animal_age_reproduced": 115976,
+    "deaths_animal_age_no_offspring": 68052,
+    "deaths_animal_killed_by_kin": 657312,
+    "deaths_animal_killed_by_nonkin": 67265,
+    "deaths_animal_killed_by_plant": 706807,
+    "deaths_animal_killed_by_other": 36652
+  },
+  "death_shares": {
+    "deaths_animal_age_reproduced": 0.07020067019195382,
+    "deaths_animal_age_no_offspring": 0.04119210878028939,
+    "deaths_animal_killed_by_kin": 0.39787320588064384,
+    "deaths_animal_killed_by_nonkin": 0.040715734983632595,
+    "deaths_animal_killed_by_plant": 0.4278326989753424,
+    "deaths_animal_killed_by_other": 0.02218558118813799
+  },
+  "endpoint_original_only": 11,
+  "endpoint_original_and_plant": 4,
+  "endpoint_plant_only": 17,
+  "first_absence_ci95": [
+    0.25862789310193596,
+    0.5184955306900703
+  ],
+  "imbricatis_endpoint_presence": 7,
+  "flos_endpoint_presence": 41,
+  "no_plants_at_stopped_endpoint": 6,
+  "stopped_with_plants_and_food_over_4000": [
+    3,
+    5,
+    8,
+    15,
+    16,
+    27,
+    29,
+    30,
+    33,
+    40,
+    43,
+    44
+  ],
+  "initial_snapshot_count": 9,
+  "initial_snapshot_distinct_hashes": 1,
+  "survivors": {
+    "final_animals": {
+      "n": 32,
+      "mean": 148.1875,
+      "median": 106.0,
+      "q1": 50.25,
+      "q3": 227.0,
+      "minimum": 19.0,
+      "maximum": 580.0
+    },
+    "final_plants": {
+      "n": 32,
+      "mean": 625.0625,
+      "median": 589.5,
+      "q1": 382.0,
+      "q3": 816.5,
+      "minimum": 84.0,
+      "maximum": 1229.0
+    },
+    "final_food": {
+      "n": 32,
+      "mean": 4245.9375,
+      "median": 4103.5,
+      "q1": 3173.0,
+      "q3": 4967.5,
+      "minimum": 304.0,
+      "maximum": 10774.0
+    },
+    "final_mixotrophs": {
+      "n": 32,
+      "mean": 21.5,
+      "median": 4.0,
+      "q1": 1.0,
+      "q3": 9.0,
+      "minimum": 0.0,
+      "maximum": 328.0
+    },
+    "peak_animals": {
+      "n": 32,
+      "mean": 384.40625,
+      "median": 346.5,
+      "q1": 294.0,
+      "q3": 442.5,
+      "minimum": 233.0,
+      "maximum": 685.0
+    },
+    "final_mean_animal_cells": {
+      "n": 32,
+      "mean": 4.4524375,
+      "median": 4.048,
+      "q1": 3.098,
+      "q3": 5.25975,
+      "minimum": 2.261,
+      "maximum": 7.958
+    },
+    "final_animal_armor_frac": {
+      "n": 32,
+      "mean": 0.15475,
+      "median": 0.027,
+      "q1": 0.00675,
+      "q3": 0.0525,
+      "minimum": 0.0,
+      "maximum": 1.0
+    },
+    "final_animal_killer_frac": {
+      "n": 32,
+      "mean": 0.6643749999999999,
+      "median": 0.96,
+      "q1": 0.183,
+      "q3": 1.0,
+      "minimum": 0.008,
+      "maximum": 1.0
+    },
+    "final_mean_animal_mouths": {
+      "n": 32,
+      "mean": 1.16825,
+      "median": 1.0215,
+      "q1": 1.0,
+      "q3": 1.12325,
+      "minimum": 1.0,
+      "maximum": 2.0
+    },
+    "final_animal_eye_frac": {
+      "n": 32,
+      "mean": 0.88128125,
+      "median": 0.981,
+      "q1": 0.939,
+      "q3": 1.0,
+      "minimum": 0.02,
+      "maximum": 1.0
+    },
+    "final_plant_armor_frac": {
+      "n": 32,
+      "mean": 0.12178125,
+      "median": 0.0235,
+      "q1": 0.0135,
+      "q3": 0.056,
+      "minimum": 0.004,
+      "maximum": 0.996
+    },
+    "final_plant_killer_frac": {
+      "n": 32,
+      "mean": 0.79259375,
+      "median": 0.8340000000000001,
+      "q1": 0.7295,
+      "q3": 0.9935,
+      "minimum": 0.248,
+      "maximum": 1.0
+    },
+    "final_animal_lineages": {
+      "n": 32,
+      "mean": 1.21875,
+      "median": 1.0,
+      "q1": 1.0,
+      "q3": 1.0,
+      "minimum": 1.0,
+      "maximum": 2.0
+    },
+    "final_animal_species": {
+      "n": 32,
+      "mean": 13.125,
+      "median": 12.0,
+      "q1": 6.5,
+      "q3": 17.25,
+      "minimum": 1.0,
+      "maximum": 41.0
+    },
+    "final_mean_animal_generation": {
+      "n": 32,
+      "mean": 366.65128125,
+      "median": 367.9135,
+      "q1": 282.09625,
+      "q3": 432.85375,
+      "minimum": 176.771,
+      "maximum": 613.988
+    }
+  },
+  "stopped_no_animals": {
+    "final_animals": {
+      "n": 18,
+      "mean": 0.0,
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "minimum": 0.0,
+      "maximum": 0.0
+    },
+    "final_plants": {
+      "n": 18,
+      "mean": 194.16666666666666,
+      "median": 166.0,
+      "q1": 0.0,
+      "q3": 319.25,
+      "minimum": 0.0,
+      "maximum": 619.0
+    },
+    "final_food": {
+      "n": 18,
+      "mean": 7091.111111111111,
+      "median": 9429.5,
+      "q1": 714.75,
+      "q3": 11238.25,
+      "minimum": 93.0,
+      "maximum": 14125.0
+    },
+    "final_mixotrophs": {
+      "n": 18,
+      "mean": 0.1111111111111111,
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "minimum": 0.0,
+      "maximum": 2.0
+    },
+    "peak_animals": {
+      "n": 18,
+      "mean": 326.8888888888889,
+      "median": 291.0,
+      "q1": 239.25,
+      "q3": 364.5,
+      "minimum": 191.0,
+      "maximum": 727.0
+    },
+    "final_mean_animal_cells": {
+      "n": 18,
+      "mean": 0.0,
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "minimum": 0.0,
+      "maximum": 0.0
+    },
+    "final_animal_armor_frac": {
+      "n": 18,
+      "mean": 0.0,
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "minimum": 0.0,
+      "maximum": 0.0
+    },
+    "final_animal_killer_frac": {
+      "n": 18,
+      "mean": 0.0,
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "minimum": 0.0,
+      "maximum": 0.0
+    },
+    "final_mean_animal_mouths": {
+      "n": 18,
+      "mean": 0.0,
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "minimum": 0.0,
+      "maximum": 0.0
+    },
+    "final_animal_eye_frac": {
+      "n": 18,
+      "mean": 0.0,
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "minimum": 0.0,
+      "maximum": 0.0
+    },
+    "final_plant_armor_frac": {
+      "n": 18,
+      "mean": 0.03744444444444445,
+      "median": 0.013000000000000001,
+      "q1": 0.0,
+      "q3": 0.04725,
+      "minimum": 0.0,
+      "maximum": 0.191
+    },
+    "final_plant_killer_frac": {
+      "n": 18,
+      "mean": 0.6123333333333333,
+      "median": 0.876,
+      "q1": 0.0,
+      "q3": 0.9924999999999999,
+      "minimum": 0.0,
+      "maximum": 1.0
+    },
+    "final_animal_lineages": {
+      "n": 18,
+      "mean": 0.0,
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "minimum": 0.0,
+      "maximum": 0.0
+    },
+    "final_animal_species": {
+      "n": 18,
+      "mean": 0.0,
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "minimum": 0.0,
+      "maximum": 0.0
+    },
+    "final_mean_animal_generation": {
+      "n": 0,
+      "mean": null,
+      "median": null,
+      "q1": null,
+      "q3": null,
+      "minimum": null,
+      "maximum": null
+    }
+  }
+}

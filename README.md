@@ -5,6 +5,9 @@ FOR FEATURE REQUESTS, USE THE DISCUSSIONS TAB. FOR BUG REPORTS, USE THE ISSUES T
 # The Life Engine
 [Play here!](https://thelifeengine.net/)
 
+The [baseline experiment archive](baseline/README.md) contains the original results,
+analysis report, and instructions for reproducing the analysis.
+
 The life engine is a cellular automaton designed to simulate the long term processes of biological evolution. It allows organisms to eat, reproduce, mutate, and adapt.
 Unlike genetic algorithms, the life engine does not manually select the most "fit" organism for some given task, but rather allows true natural selection to 
 run its course. Organisms that survive, successfully produce offspring, and out-compete their neighbors naturally propogate througout the environment.
