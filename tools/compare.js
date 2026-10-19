@@ -1,24 +1,15 @@
 /*
- * Compare results from two experimental conditions.
+ * Compare two experimental conditions.
  *
- * Usage with experiment logs downloaded from the app (one log per run):
- *   node tools/compare.js --a logs/off_1.csv logs/off_2.csv ... --b logs/on_1.csv logs/on_2.csv ...
- *   node tools/compare.js --a logs/off_*.csv --b logs/on_*.csv --names "soil off" "soil on"
+ * For app logs:
+ *   node tools/compare.js --a logs/off_1.csv logs/off_2.csv --b logs/on_1.csv logs/on_2.csv
  *
- * Usage with tools/headless.js summaries:
- *   node tools/compare.js results/baseline_summary.csv results/soil_on_summary.csv
+ * Each log counts as one run. Only the first run and its first animal
+ * extinction are used.
  *
- * Each downloaded log counts as one replicate. Only the first run in a log is
- * used, and the first animal extinction in that run is recorded.
+ * The script compares extinction rates, survival time, peak population,
+ * armour levels and extinction classifications.
  *
- * Reports for each condition:
- *   - Extinction count and rate, compared using Fisher's exact test.
- *   - Mean survival time, peak population and final armour fraction,
- *     compared using permutation tests.
- *   - Number of replicates in each classification.
- *
- * With only 5 replicates per condition, only large differences are likely
- * to be detected. A non-significant result does not prove there is no difference.
  */
 const fs = require('fs');
 const path = require('path');

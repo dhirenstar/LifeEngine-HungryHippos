@@ -2,7 +2,7 @@ const Hyperparams = require('../Hyperparameters');
 
 
 /*
- * SoilLayer (Dhiren-Soil modification)
+ * SoilLayer (Mathew-Soil modification)
  *
  * Keeps track of the nutrients in each grid tile.
  * Producers use nutrients to create food, movers reduce nutrients

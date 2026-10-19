@@ -1,40 +1,29 @@
 /*
- * ExtinctionClassifier (Logger)
+ * ExtinctionClassifier
  *
- * Classifies population extinctions using logged simulation data.
- * It checks population growth, trait changes, evidence of selection,
- * and the main causes of death during a collapse.
+ * Uses simulation data to classify animal extinctions.
  *
- * Classifications:
- *   too_small_to_classify      Peak population was too small to judge adaptation.
- *   failure_to_adapt           Population failed to establish.
- *   exhaustion_no_trait_change Population collapsed without a major trait change.
- *   drift_without_selection    A trait changed without clear evidence of selection.
- *   misadaptation_candidate    A selected trait change may be linked to the collapse.
+ * It looks at population growth, trait changes, selection and
+ * causes of death to suggest a possible reason for extinction.
  *
- * Possible mechanisms:
- *   overgrazing     Food declined and food-limited deaths dominated.
- *   self_predation  Kin-killing dominated the collapse.
- *   unclear         Neither pattern was dominant.
- *
- * This classifier analyses logged data only. Its results suggest possible
- * explanations but do not prove that a trait caused the collapse.
+ * The results suggest possible explanations, but do not prove
+ * that a trait caused the extinction.
  */
 
 const C = {
-    MIN_PEAK: 10,           // Minimum peak population needed to classify a collapse
-    GROWTH_MIN: 1.5,        // Minimum growth needed for the population to establish
-    DRIFT_MIN: 0.2,         // Minimum trait change: 0.2 for fractions, 20% for counts
-    SELECTION_MIN: 0.02,    // Minimum breeder gap for count traits
-    FITNESS_RATIO_MIN: 1.1, // New variant needs at least 10% more births per individual
-    MIN_EXPOSURE: 10,       // Minimum samples for each variant while both are present
-    WINDOW: 3,              // Number of rows used for the start and peak averages
-    FOOD_GONE: 0.25,        // Food at the end must be below 25% of its peak level
-    CAUSE_DOMINANT: 0.4,    // A death cause is dominant if it accounts for at least 40%
+    MIN_PEAK: 10,           // Minimum population size
+    GROWTH_MIN: 1.5,        // Minimum population growth
+    DRIFT_MIN: 0.2,         // Minimum trait change
+    SELECTION_MIN: 0.02,    // Minimum difference between breeders and population
+    FITNESS_RATIO_MIN: 1.1, // Required birth-rate advantage (10%)
+    MIN_EXPOSURE: 10,       // Minimum data for each variant
+    WINDOW: 3,              // Number of rows used for averages
+    FOOD_GONE: 0.25,        // Food must fall below 25% of its peak
+    CAUSE_DOMINANT: 0.4,    // Death cause must account for 40% of deaths
 };
 
 const TRAITS = [
-    // Trait, breeder data, whether to use relative change, births for each variant
+    // Trait, selection data, relative change, birth counts
     ['animal_armor_frac', 'sel_armor_frac', false, 'births_by_armored', 'births_by_unarmored'],
     ['mean_animal_cells', 'sel_mean_cells', true],
     ['animal_killer_frac', 'sel_killer_frac', false, 'births_by_killer', 'births_by_no_killer'],
@@ -66,7 +55,7 @@ function classify(segment, run, extinct = true) {
         return Object.assign(report, { classification: 'no_animals', mechanism: '' });
     }
 
-    // 1. establishment
+    // Check population growth
     let first = live[0];
     let last = segment[segment.length - 1];
     let peakIdx = 0;
@@ -80,7 +69,7 @@ function classify(segment, run, extinct = true) {
     report.peak_tick = peak.tick;
     report.growth = r3(peak.animals / first.animals);
 
-    // 2. compare trait values near the start and population peak.
+    // Check how traits changed as the population grew
     let early = live.slice(0, C.WINDOW);
     let around = live.slice(Math.max(0, peakIdx - 1), peakIdx + C.WINDOW - 1);
     let growthRows = live.slice(0, peakIdx + 1);
@@ -146,7 +135,7 @@ function classify(segment, run, extinct = true) {
         }
     }
 
-    // 3. Check deaths and food levels between the population peak and the end.
+    // Check deaths and food levels during the population decline
     let collapse = segment.slice(segment.indexOf(peak) + 1);
     let sum = k => collapse.reduce((s, r) => s + (num(r[k]) || 0), 0);
     let deaths = {

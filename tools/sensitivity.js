@@ -1,14 +1,11 @@
 /*
- * Test how sensitive extinction classifications are to threshold changes.
- *
- * Test each threshold at different values to see whether extinction classifications change.
+ * Check whether changing the thresholds affects extinction classifications.
  *
  * Usage:
  *   node tools/sensitivity.js experiment_log.csv [more logs...]
  *   node tools/sensitivity.js results/soil_on_rep*.csv
  *
- * Works with logs downloaded from the web interface 
- * Does not change the simulation or classifier permanently.
+ * Uses logs downloaded from the web interface.
  */
 const fs = require('fs');
 const path = require('path');
