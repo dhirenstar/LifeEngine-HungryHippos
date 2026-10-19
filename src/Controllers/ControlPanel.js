@@ -432,6 +432,10 @@ class ControlPanel {
         $('#movers-produce').change( function() {
             Hyperparams.moversCanProduce = this.checked;
         });
+        $('#enforce-trophic-sep').change( function() {
+            Hyperparams.enforceTrophicSeparation = this.checked;
+            ExperimentLogger.note(this.checked ? 'trophic_sep_on': 'trophic_sep_off');
+        });
         $('#food-blocks').change( function() {
             Hyperparams.foodBlocksReproduction = this.checked;        
         });
@@ -524,6 +528,7 @@ class ControlPanel {
         $('#mutation-symmetry-chance').val(Hyperparams.mutationSymmetryChance);
         $('#brain-mutation-chance').val(Hyperparams.brainMutationChance);
         $('#movers-produce').prop('checked', Hyperparams.moversCanProduce);
+        $('#enforce-trophic-sep').prop('checked', Hyperparams.enforceTrophicSeparation);
         $('#food-blocks').prop('checked', Hyperparams.foodBlocksReproduction);
         $('#dont-kill-same-species').prop('checked', Hyperparams.dontKillSameSpecies);
         $('#kin-distance').val(Hyperparams.kinDistance);

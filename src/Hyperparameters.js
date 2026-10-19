@@ -26,6 +26,7 @@ const Hyperparams = {
         this.lavaIncrease = 25;
         this.lavaDuration = 500;
         this.lavaCooldown = 1000;
+        this.enforceTrophicSeparation = false;
 
         this.instaKill = false;
         this.dontKillSameSpecies = false;
@@ -44,7 +45,7 @@ const Hyperparams = {
         // counts as kin when classifying deaths (see Organism/Kinship.js).
         this.kinDistance = 2;
 
-        // Dhiren-Soil: Soil nutrients (see Environments/SoilLayer.js)
+        // Mathew-Soil: Soil nutrients (see Environments/SoilLayer.js)
         this.soilEnabled = false;
         this.soilMax = 100;          // nutrient capacity per tile
         this.soilCostPerFood = 10;   // drawn from a tile to grow one food there

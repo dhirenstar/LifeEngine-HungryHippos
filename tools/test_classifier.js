@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /*
  * Tests ExtinctionClassifier with example logger data.
  * Each test checks whether a specific classification can be reached.

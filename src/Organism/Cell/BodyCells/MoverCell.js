@@ -8,7 +8,7 @@ class MoverCell extends BodyCell{
         this.org.anatomy.is_mover = true;
     }
 
-    // Dhiren-Soil: Trampling. Each mover cell compacts the soil tile it stands
+    // Mathew-Soil: Trampling. Each mover cell compacts the soil tile it stands
     // on, so dense, mobile populations degrade the ground plants grow from.
     performFunction() {
         var soil = this.org.env.soil;

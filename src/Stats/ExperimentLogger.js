@@ -4,22 +4,20 @@ const Kinship = require('../Organism/Kinship');
 const ExtinctionClassifier = require('./ExtinctionClassifier');
 
 /*
- * ExperimentLogger (Logger)
+ * ExperimentLogger
  *
- * Records simulation data every interval ticks, including population
- * counts, traits, births, deaths and selection differences.
+ * Records simulation data, including population, traits, births and deaths.
  *
- * It also tracks armour inheritance and allows other modifications
- * to add their own data columns.
+ * It also tracks armour inheritance and allows other mods to add data.
  *
- * When the animal population goes extinct, ExtinctionClassifier
- * analyses the logged data and records a possible explanation.
+ * When animals go extinct, ExtinctionClassifier uses the data to
+ * suggest a possible reason.
  *
  * Kinds:
- *   animal    = has a mouth and no producer
- *   plant     = has a producer and no mover
- *   mixotroph = has a producer and a mover
- *   inert     = no mouth and no producer
+ *   animal    = has a mouth but no producer
+ *   plant     = has a producer but cannot move
+ *   mixotroph = has a producer and can move
+ *   inert     = has no mouth or producer
  */
 
 const BASE_COLUMNS = [
@@ -30,28 +28,35 @@ const BASE_COLUMNS = [
     // animal traits (population)
     'mean_animal_cells', 'animal_armor_frac', 'mean_animal_armor',
     'animal_killer_frac', 'mean_animal_mouths', 'animal_eye_frac',
-    // plant traits
+
+    // Plant traits
     'plant_armor_frac', 'plant_killer_frac',
-    // selection: breeder mean minus population mean (blank if no animal births)
+
+    // Selection
     'animal_breeders',
     'sel_armor_frac', 'sel_mean_cells', 'sel_killer_frac', 'sel_mean_mouths', 'sel_eye_frac',
-    // births split by whether the animal parent had the trait (per-capita fitness test)
+
+    // Births by parent trait
     'births_by_armored', 'births_by_unarmored',
     'births_by_killer', 'births_by_no_killer',
     'births_by_eyed', 'births_by_no_eyes',
-    // armour inheritance
+
+    // Armour inheritance
     'armor_gain_births_animal', 'armor_loss_births_animal',
     'armor_gain_births_plant', 'armor_loss_births_plant',
-    // births
+
+    // Births
     'births_animal', 'births_plant', 'births_mixotroph',
-    // animal deaths by cause
-    'deaths_animal_age_reproduced',     // lived full lifespan and had offspring
-    'deaths_animal_age_no_offspring',   // lived full lifespan without producing offspring; may indicate food limitations
-    'deaths_animal_killed_by_kin',      // killed by an animal considered kin based on anatomical similarity
-    'deaths_animal_killed_by_nonkin',   // killed by an animal not considered kin
-    'deaths_animal_killed_by_plant',    // plant with a killer cell
-    'deaths_animal_killed_by_other',    // mixotroph or inert attacker
-    // plant deaths
+
+    // Animal deaths
+    'deaths_animal_age_reproduced',
+    'deaths_animal_age_no_offspring',
+    'deaths_animal_killed_by_kin',
+    'deaths_animal_killed_by_nonkin',
+    'deaths_animal_killed_by_plant',
+    'deaths_animal_killed_by_other',
+
+    // Plant deaths
     'deaths_plant_age', 'deaths_plant_killed',
 ];
 
@@ -68,9 +73,10 @@ function traitsOf(org) {
             else if (cell.state === CellStates.mouth) t.mouths++;
             else if (cell.state === CellStates.eye) t.eyes++;
         }
-        if (t.mouths > 0 && !a.is_producer) t.kind = 'animal';
-        else if (a.is_producer && !a.is_mover) t.kind = 'plant';
-        else if (a.is_producer && a.is_mover) t.kind = 'mixotroph';
+
+        if (a.is_producer && t.mouths > 0) t.kind = 'mixotroph';
+        else if (t.mouths > 0) t.kind = 'animal';
+        else if (a.is_producer) t.kind = 'plant'
         else t.kind = 'inert';
         a._traits = t;
     }
@@ -106,6 +112,8 @@ const ExperimentLogger = {
         this.pending_event = '';
         this.prev_pop_means = null;
         this.probes = this.probes || [];
+        if (!this.probes.some(p => p.name === 'trophic_sep'))
+            this.registerProbe('trophic_sep', () => Hyperparams.enforceTrophicSeparation ? 1 : 0);
         this.resetCounters();
     },
 
@@ -128,10 +136,9 @@ const ExperimentLogger = {
     },
 
     /*
-     * Probes let other modifications add columns without editing this file.
-     * Example, for a soil/fertility modification:
-     *   ExperimentLogger.registerProbe('soil_mean', env => env.soil ? env.soil.mean() : '');
-     */
+    * Lets other mods add their own data columns.
+    * Example: a soil mod can log the average soil level.
+    */
     registerProbe(name, fn) {
         if (BASE_COLUMNS.includes(name) || this.probes.some(p => p.name === name)) {
             console.warn('Probe column already exists: ' + name);
