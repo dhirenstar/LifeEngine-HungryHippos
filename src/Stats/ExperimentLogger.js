@@ -67,9 +67,10 @@ function traitsOf(org) {
             else if (cell.state === CellStates.mouth) t.mouths++;
             else if (cell.state === CellStates.eye) t.eyes++;
         }
-        if (t.mouths > 0 && !a.is_producer) t.kind = 'animal';
-        else if (a.is_producer && !a.is_mover) t.kind = 'plant';
-        else if (a.is_producer && a.is_mover) t.kind = 'mixotroph';
+
+        if (a.is_producer && t.mouths > 0) t.kind = 'mixotroph';
+        else if (t.mouths > 0) t.kind = 'animal';
+        else if (a.is_producer) t.kind = 'plant'
         else t.kind = 'inert';
         a._traits = t;
     }
@@ -105,6 +106,8 @@ const ExperimentLogger = {
         this.pending_event = '';
         this.prev_pop_means = null;
         this.probes = this.probes || [];
+        if (!this.probes.some(p => p.name === 'trophic_sep'))
+            this.registerProbe('trophic_sep', () => Hyperparams.enforceTrophicSeparation ? 1 : 0);
         this.resetCounters();
     },
 

@@ -1,6 +1,8 @@
 const CellStates = require("./Cell/CellStates");
 const BodyCellFactory = require("./Cell/BodyCells/BodyCellFactory");
 const SerializeHelper = require("../Utils/SerializeHelper");
+const Hyperparams = require("../Hyperparameters")
+
 
 class Anatomy {
     constructor(owner) {
@@ -31,8 +33,24 @@ class Anatomy {
         this.owner.brain.checkAddedCell(new_cell);
         return new_cell;
     }
+    violatesTrophicSeparation(state) {
+        if (!Hyperparams.enforceTrophicSeparation) return false;
+        if (state == CellStates.producer) {
+            for (var cell of this.cells)
+                if (cell.state == CellStates.mouth) return true;
+
+        }
+        else if (state == CellStates.mover) {
+            if (this.is_producer) return true;
+        }
+        else if (state == CellStates.mouth) {
+            if (this.is_producer) return true;
+        }
+        return false;
+    }
 
     addRandomizedCell(state, c, r) {
+        if (this.violatesTrophicSeparation(state)) return null;
         var new_cell = BodyCellFactory.createRandom(this.owner, state, c, r);
         this.cells.push(new_cell);
         this.owner.brain.checkAddedCell(new_cell);
@@ -46,6 +64,7 @@ class Anatomy {
     }
 
     replaceCell(state, c, r, randomize=true) {
+        if (this.violatesTrophicSeparation(state)) return null;
         this.removeCell(c, r, true);
         if (randomize) {
             return this.addRandomizedCell(state, c, r);
