@@ -20,6 +20,7 @@ const Hyperparams = {
 
         this.foodBlocksReproduction = true;
         this.moversCanProduce = false;
+        this.enforceTrophicSeparation = false;
 
         this.instaKill = false;
         this.dontKillSameSpecies = false;
