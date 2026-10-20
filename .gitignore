@@ -5,3 +5,4 @@ dist/js/bundle.js.LICENSE.txt
 __pycache__/
 *.py[cod]
 .venv/
+/results/
