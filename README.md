@@ -187,7 +187,7 @@ webpack.config.js         Build configuration
 
 ## AI declaration
 
-We used AI tools for general idea feedback and refinement, codebase analysis, and recommendations on changes to be made to the codebase.  Responsibility for the submitted work, implementation decisions, interpretation of results, and final project content remains with Mathew Maartens, Ziyaad Shaboodien, Dhiren Chetty, and Rakeen Ramdeen.
+We used AI tools for general idea feedback and refinement, codebase analysis, and recommendations on changes to be made to the codebase. AI was used to help with the lineage tracking and statistic related files. Responsibility for the submitted work, implementation decisions, interpretation of results, and final project content remains with Mathew Maartens, Ziyaad Shaboodien, Dhiren Chetty, and Rakeen Ramdeen.
 
 ## Acknowledgements and license
 
